@@ -3,66 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CJ | ThroneLeaf Games</title>
+    <title>Chetan Joshi | Portfolio</title>
     <style>
-        :root { --neon: #39ff14; --bg: #0b0e14; --card: #161b22; }
-        body { background: var(--bg); color: #e0e0e0; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
-        .container { max-width: 900px; margin: auto; padding: 40px 20px; }
-        
-        /* Header Section */
-        .hero { border: 2px solid var(--neon); padding: 30px; border-radius: 20px; background: rgba(57, 255, 20, 0.05); margin-bottom: 40px; box-shadow: 0 0 15px rgba(57, 255, 20, 0.1); }
-        h1 { color: var(--neon); font-size: 2.5rem; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
-        .tagline { font-size: 1.2rem; color: #888; margin: 10px 0; }
-        
-        /* Skills Tags */
-        .tags { margin-top: 15px; }
-        .tag { background: #1f242d; padding: 6px 18px; border-radius: 20px; font-size: 0.9rem; margin: 5px; display: inline-block; border: 1px solid #333; transition: 0.3s; }
-        .tag:hover { border-color: var(--neon); color: var(--neon); }
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #000;
+            color: white;
+            overflow-x: hidden;
+        }
 
-        /* Grid for Projects */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 30px; }
-        .project-card { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid #222; text-align: left; transition: transform 0.3s; }
-        .project-card:hover { transform: translateY(-5px); border-color: var(--neon); }
-        .project-card h3 { margin-top: 0; color: var(--neon); }
-        
-        /* Links & Buttons */
-        .links { margin-top: 30px; }
-        .btn { text-decoration: none; color: white; border: 1px solid #444; padding: 10px 20px; border-radius: 5px; margin: 10px; display: inline-block; transition: 0.3s; }
-        .btn:hover { background: var(--neon); color: black; font-weight: bold; border-color: var(--neon); }
+        /* Background Image Setup */
+        .bg-image {
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('Cj.png');
+            height: 100vh;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .content {
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            letter-spacing: -2px;
+        }
+
+        .subtitle {
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: #3498db;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        /* Buttons like the screenshot */
+        .btn-container {
+            margin-top: 30px;
+        }
+
+        .btn {
+            text-decoration: none;
+            color: white;
+            padding: 12px 35px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin: 0 10px;
+            transition: 0.3s;
+            display: inline-block;
+        }
+
+        .btn-select {
+            background-color: #458a7d; /* Teal color from your image */
+        }
+
+        .btn-demo {
+            border: 1px solid white;
+            background: transparent;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="hero">
-        <h1>CJ (ThroneLeaf Games)</h1>
-        <p class="tagline">Indie Game Dev & 3D Artist | B.Tech Student</p>
-        <div class="tags">
-            <span class="tag">Unity</span>
-            <span class="tag">Blender</span>
-            <span class="tag">C#</span>
-            <span class="tag">Arch Linux</span>
-            <span class="tag">Stylized Art</span>
-        </div>
-        <div class="links">
-            <a href="https://itch.io" class="btn">🎮 Play Games</a>
-            <a href="https://artstation.com" class="btn">🎨 ArtStation</a>
-            <a href="mailto:your-email@gmail.com" class="btn">✉️ Hire Me</a>
+    <div class="bg-image">
+        <div class="content">
+            <div class="subtitle">Indie Game Developer</div>
+            <h1>Chetan Joshi</h1>
+            <p>Founder of ThroneLeaf Games. Crafting immersive parkour experiences and stylized 3D art in Unity & Blender.</p>
+            
+            <div class="btn-container">
+                <a href="#" class="btn btn-select">My Games</a>
+                <a href="#" class="btn btn-demo">3D Art</a>
+            </div>
         </div>
     </div>
-
-    <h2>Projects</h2>
-    <div class="grid">
-        <div class="project-card">
-            <h3>TenGen Parkour</h3>
-            <p>A stylized parkour game featuring advanced movement mechanics. Built using Unity and Blender assets.</p>
-        </div>
-        <div class="project-card">
-            <h3>Stylized Environments</h3>
-            <p>Creating immersive worlds inspired by the 'Arcane' art style. Optimized for low-end hardware.</p>
-        </div>
-    </div>
-</div>
 
 </body>
 </html>
