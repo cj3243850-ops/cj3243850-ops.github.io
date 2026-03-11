@@ -3,101 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chetan Joshi | Portfolio</title>
+    <title>Chetan Joshi | ThroneLeaf Games</title>
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #000;
-            color: white;
+        /* 1. Basic Setup */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { 
+            height: 100%; 
+            font-family: 'Inter', 'Segoe UI', sans-serif; 
+            background: #0a0a0a; 
+            color: white; 
             overflow-x: hidden;
         }
 
-        /* Background Image Setup */
-        .bg-image {
-            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('Cj.png');
+        /* 2. Background with your Image */
+        .hero {
+            position: relative;
             height: 100vh;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), 
+                        url('Cj.png') no-repeat center center/cover;
+            overflow: hidden;
         }
 
-        .content {
-            max-width: 600px;
+        /* 3. Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 4. Content Styling */
+        .container {
+            text-align: center;
             padding: 20px;
+            z-index: 2;
+        }
+
+        .tagline {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: #4db8ff;
+            margin-bottom: 10px;
+            animation: fadeInDown 1s ease forwards;
         }
 
         h1 {
-            font-size: 4rem;
-            margin-bottom: 10px;
+            font-size: clamp(3rem, 10vw, 5rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease 0.2s forwards;
+            opacity: 0;
             letter-spacing: -2px;
         }
 
-        .subtitle {
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            color: #3498db;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-        }
-
         p {
+            max-width: 500px;
+            margin: 0 auto 30px;
             font-size: 1.1rem;
-            opacity: 0.8;
+            color: #ccc;
             line-height: 1.6;
+            animation: fadeInUp 1s ease 0.4s forwards;
+            opacity: 0;
         }
 
-        /* Buttons like the screenshot */
-        .btn-container {
-            margin-top: 30px;
+        /* 5. Buttons (Glass Effect) */
+        .btn-group {
+            animation: fadeInUp 1s ease 0.6s forwards;
+            opacity: 0;
         }
 
         .btn {
-            text-decoration: none;
-            color: white;
-            padding: 12px 35px;
-            border-radius: 8px;
-            font-weight: bold;
-            margin: 0 10px;
-            transition: 0.3s;
             display: inline-block;
+            padding: 14px 30px;
+            margin: 10px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
         }
 
-        .btn-select {
-            background-color: #458a7d; /* Teal color from your image */
+        .btn-primary {
+            background: rgba(69, 138, 125, 0.9);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .btn-demo {
-            border: 1px solid white;
-            background: transparent;
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
         .btn:hover {
-            transform: translateY(-3px);
-            opacity: 0.9;
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            background: rgba(255, 255, 255, 0.2);
         }
+
+        /* Simple Social Links at bottom */
+        .socials {
+            position: absolute;
+            bottom: 30px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            animation: fadeInUp 1.5s ease 1s forwards;
+            opacity: 0;
+        }
+
+        .socials a { color: white; text-decoration: none; font-size: 0.9rem; opacity: 0.6; transition: 0.3s; }
+        .socials a:hover { opacity: 1; }
     </style>
 </head>
 <body>
 
-    <div class="bg-image">
-        <div class="content">
-            <div class="subtitle">Indie Game Developer</div>
+    <section class="hero">
+        <div class="container">
+            <div class="tagline">Indie Game Dev & 3D Artist</div>
             <h1>Chetan Joshi</h1>
-            <p>Founder of ThroneLeaf Games. Crafting immersive parkour experiences and stylized 3D art in Unity & Blender.</p>
+            <p>Second Semester B.Tech CSE Student. Building "TenGen Parkour" and creating stylized environments in Blender.</p>
             
-            <div class="btn-container">
-                <a href="#" class="btn btn-select">My Games</a>
-                <a href="#" class="btn btn-demo">3D Art</a>
+            <div class="btn-group">
+                <a href="https://github.com/cj3243850-ops" class="btn btn-primary">My Projects</a>
+                <a href="https://www.instagram.com/its_mee__0027" class="btn btn-secondary">Instagram</a>
             </div>
         </div>
-    </div>
+
+        <div class="socials">
+            <a href="#">Discord</a>
+            <a href="#">ArtStation</a>
+            <a href="#">LinkedIn</a>
+        </div>
+    </section>
 
 </body>
 </html>
