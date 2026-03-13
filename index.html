@@ -3,305 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chetan Joshi | Lead Developer @ ThroneLeaf Games</title>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    
+    <title>Chetan Joshi | ThroneLeaf Games Infinite Loop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <style>
-        :root {
-            /* Anime/Manga High Contrast Palette */
-            --bg: #fff; /* Stark white background */
-            --text-main: #000; /* Deep black text */
-            --primary: #fff; /* Primary acts as accent on white */
-            --accent: #458a7d; /* TLG Green as dynamic accent */
-            --glass: rgba(0, 0, 0, 0.03); /* Soft grey glassmorphism on white */
-            --transition-speed: 0.4s; /* Faster animation transition for snappier feel */
+        :root { --bg: #fff; --text: #000; --accent: #458a7d; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        h1, h2 { font-family: 'Anton', sans-serif; text-transform: uppercase; }
+
+        /* --- MANGA CHARACTER GUIDE --- */
+        #manga-guide {
+            position: fixed; bottom: 20px; left: 50px; width: 150px; z-index: 1000;
+            pointer-events: none; transform: scaleX(-1); animation: float 3s ease-in-out infinite;
         }
+        @keyframes float { 0%, 100% { transform: translateY(0) scaleX(-1); } 50% { transform: translateY(-20px) scaleX(-1); } }
 
-        /* --- GLOBAL MANGA STYLING --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; outline: none; }
-        body { 
-            background: var(--bg); 
-            color: var(--text-main); 
-            font-family: 'Inter', sans-serif; 
-            overflow-x: hidden; 
-            -webkit-font-smoothing: antialiased;
-            /* Subtitle Manga feel on overall site */
-            border-right: 5px solid #000;
-        }
+        /* --- INFINITE WRAPPER --- */
+        .infinite-wrapper { display: flex; width: fit-content; height: 100vh; flex-wrap: nowrap; }
+        .panel { width: 100vw; height: 100vh; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: relative; border-right: 10px solid #000; }
 
-        h1, h2, h3 { 
-            font-family: 'Anton', sans-serif; /* Dynamic Anime font for headers */
-            text-transform: uppercase;
-            letter-spacing: -2px;
-            font-weight: 400;
-        }
+        /* --- THE CONTINUOUS LINE --- */
+        .life-line { position: absolute; top: 50%; left: 0; width: 100%; height: 8px; background: #000; z-index: 1; }
+        .fill-progress { position: fixed; top: 50%; left: 0; height: 8px; background: var(--accent); z-index: 2; width: 0%; }
 
-        /* --- INITIAL LANDING OVERLAY --- */
-        #landing-gate {
-            position: fixed; inset: 0; background: #000; z-index: 9999;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
-        .gate-btn {
-            padding: 20px 50px; border: 4px solid #fff; color: white;
-            background: transparent; font-weight: 800; letter-spacing: 5px;
-            cursor: pointer; transition: all 0.3s; border-radius: 0px; /* Sharp corners like manga panels */
-            text-transform: uppercase;
-            font-family: 'Anton', sans-serif;
-        }
-        .gate-btn:hover { background: #fff; color: #000; box-shadow: 0 0 50px #fff; transform: scale(1.05); }
+        /* --- MANGA PANELS (ALL PROJECTS) --- */
+        .p-box { position: relative; z-index: 10; background: #fff; border: 8px solid #000; padding: 30px; width: 85vw; height: 75vh; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; box-shadow: 25px 25px 0 #000; overflow: hidden; }
+        .p-img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .p-img-grid img { width: 100%; border: 3px solid #000; object-fit: cover; }
+        .p-main-img { border: 4px solid #000; width: 100%; height: 300px; object-fit: cover; margin-bottom: 15px; }
+        
+        .p-text h2 { font-size: 5rem; color: var(--accent); margin-bottom: 10px; }
+        .p-text p { font-size: 1.1rem; font-weight: 800; line-height: 1.4; color: #444; }
 
-        /* --- MANGA PANEL LAYOUT & NAVIGATION --- */
-        .page-content { display: none; min-height: 100vh; animation: panelIn 0.8s forwards; }
-        .page-active { display: block; }
-        @keyframes panelIn { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
-
-        /* --- HOME: HUB NAVIGATOR --- */
-        .home-hub {
-            height: 100vh; display: flex; align-items: center; padding: 0 5%;
-            background-color: #f7f7f7; /* Off-white for hub depth */
-        }
-        .intro-panel { max-width: 900px; border-right: 5px solid #000; padding-right: 20px; }
-        .manga-name { font-size: clamp(6rem, 15vw, 12rem); line-height: 0.8; }
-        .career-badge { color: var(--accent); font-weight: 900; letter-spacing: 2px; }
-
-        .hub-navigator { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 60px; }
-        .hub-panel {
-            background: #fff; border: 5px solid #000; height: 400px;
-            cursor: pointer; position: relative; overflow: hidden;
-            display: flex; align-items: flex-end; padding: 30px;
-            transition: var(--transition-speed) ease;
-        }
-        .hub-panel:hover { transform: translateY(-15px) rotate(-1deg); box-shadow: 15px 15px 0 #000; }
-        .hub-panel h2 { font-size: 3.5rem; color: #000; z-index: 2; -webkit-text-stroke: 1px #fff; /* Stroke for dynamic look */ }
-        .panel-mask { position: absolute; inset: 0; background-size: cover; background-position: center; filter: grayscale(1) contrast(1.2); opacity: 0.15; transition: 0.4s; }
-        .hub-panel:hover .panel-mask { opacity: 1; filter: grayscale(0) contrast(1); transform: scale(1.02); }
-
-        /* --- CAREER PAGES STYLING (MANGA MODE) --- */
-        .page-section { padding: 100px 10%; position: relative; border-bottom: 5px solid #000; }
-        .panel-title { font-size: 4rem; color: #000; -webkit-text-stroke: 1px var(--accent); }
-        .back-hub-btn {
-            position: fixed; bottom: 30px; right: 30px; z-index: 5000;
-            padding: 15px 40px; background: #000; color: #fff; border-radius: 0px;
-            border: 2px solid var(--accent); cursor: pointer; text-transform: uppercase; font-weight: 900;
-        }
-
-        /* --- DYNAMIC MODEL BLOCKS --- */
-        .model-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: start; margin-top: 60px; }
-        .m-visual { border-right: 5px solid #000; padding-right: 20px; }
-        .m-desc { background: #fff; padding: 30px; border: 2px solid #000; box-shadow: 8px 8px 0 #000; }
-
-        /* --- DYNAMIC VISUALS OPTIMIZATION --- */
-        .model-panel img, .model-panel video { width: 100%; display: block; filter: contrast(1.1); -webkit-filter: contrast(1.1); }
-        video::-webkit-media-controls { filter: invert(1); } /* Dark controls on white video player */
-
-        /* --- CONTACT & STUDIO --- */
-        .studio-footer { background: #000; color: #fff; padding: 120px 10%; text-align: center; }
-        .social-manga { display: flex; justify-content: center; gap: 15px; margin-top: 40px; }
-        .s-manga-circle { width: 55px; height: 55px; border-radius: 50%; border: 3px solid #fff; background: transparent; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
-        .s-manga-circle:hover { background: #fff; transform: translateY(-5px); }
-        .s-manga-circle svg { width: 20px; fill: #fff; }
-        .s-manga-circle:hover svg { fill: #000; }
-
-        @media (max-width: 992px) {
-            .hub-navigator { grid-template-columns: 1fr; }
-            .model-panel { grid-template-columns: 1fr; }
-            .intro-panel { border-right: none; padding-right: 0; }
-        }
+        /* --- LANDING --- */
+        #gate { position: fixed; inset: 0; background: #000; z-index: 9000; display: flex; align-items: center; justify-content: center; }
+        .enter-btn { padding: 20px 60px; border: 4px solid #fff; color: #fff; background: transparent; font-family: 'Anton'; font-size: 2rem; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div id="landing-gate">
-        <div style="text-align: center;" data-aos="zoom-in">
-            <h2 style="letter-spacing: 15px; color: #444; margin-bottom: 30px; font-weight: 300;">THRONELEAF GAMES</h2>
-            <button class="gate-btn" onclick="enterSite()">Initialize Workspace</button>
-        </div>
-    </div>
-
-    <div class="nav-ui paused" id="ui-panel" style="background: rgba(0,0,0,0.9);" onclick="toggleAudio()">
-        <div class="visualizer" style="height: 15px;"><div class="bar" style="background: #fff;"></div><div class="bar" style="background: #fff;"></div><div class="bar" style="background: #fff;"></div></div>
-        <span id="st-txt" style="font-size: 0.6rem; font-weight: 900; letter-spacing: 2px; color: #fff;">SOUND OFF</span>
-    </div>
+    <div id="gate"><button class="enter-btn" onclick="start()">INITIATE LOOP</button></div>
     <audio id="bgm" loop src="S.mp3"></audio>
 
-    <button id="back-hub" class="back-hub-btn" style="display: none;" onclick="switchPanel('home-hub-page')">BACK TO HUB</button>
+    <img id="manga-guide" src="CJ.png" alt="Guide">
 
-    <div id="home-hub-page" class="page-content page-active home-hub">
-        <div class="intro-panel" data-aos="fade-right">
-            <span class="career-badge">Lead Developer @ ThroneLeaf Games</span>
-            <h1 class="manga-name">CHETAN<br>JOSHI</h1>
-            <p style="font-size: 1.4rem; color: #555; max-width: 600px; margin-bottom: 30px;"> merging Computer Science logic with stylized hard surface mechanics. Creating independent game ecosystems. </p>
-            
-            <div class="hub-navigator">
-                <div class="hub-panel" onclick="switchPanel('manga-3d-page')">
-                    <div class="panel-mask" style="background-image: url('5.jpg');"></div>
-                    <h2>3D ARTIST</h2>
-                </div>
-                <div class="hub-panel" onclick="switchPanel('manga-gamedev-page')">
-                    <div class="panel-mask" style="background-image: url('101.png');"></div>
-                    <h2>GAME DEV</h2>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="fill-progress" id="progressBar"></div>
 
-    <div id="manga-3d-page" class="page-content">
-        <div class="page-section" style="padding-top: 150px; text-align: center;">
-            <h1 class="panel-title">3D ARTIST <span>CHAPTER</span></h1>
-            <p style="color: #666; font-size: 1rem; margin-top: 10px;">modeling, texturing, rendering pipelines.</p>
-        </div>
-
-        <section class="page-section model-panel">
-            <div class="m-visual" data-aos="fade-right">
-                <img src="5.jpg" alt="Q-Ship Final" style="border: 4px solid #000; margin-bottom: 20px;">
-                <img src="6.jpg" alt="Wireframe" style="border: 2px solid #333;">
-            </div>
-            <div class="m-desc" data-aos="fade-left">
-                <h3>Q-Ship: Combat Ring</h3>
-                <p>Advanced stylized hard surface spaceship modeled and hand-painted in Blender. Focused on hydraulic mechanical movement. optimized for real-time engines on RTX 2050 architecture.</p>
-                <div style="display: flex; gap: 10px; margin-top: 20px; padding: 10px; background: #eee;">
-                    <img src="54.png" style="width: 30%; border: 1px solid #000;">
-                    <img src="56.png" style="width: 30%; border: 1px solid #000;">
-                    <img src="61.png" style="width: 30%; border: 1px solid #000;">
-                </div>
-            </div>
-        </section>
-
-        <section class="page-section model-panel">
-            <div class="m-desc" data-aos="fade-right">
-                <h3>Robotic Bipedal Mechanics</h3>
-                <p>High-detail hard surface modeling focusing on precision joints, complex paneling, and real-time GPU performance.</p>
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 20px;">
-                    <img src="64.png" style="width: 100%; border: 1px solid #aaa;">
-                    <img src="65.png" style="width: 100%; border: 1px solid #aaa;">
-                    <img src="66.png" style="width: 100%; border: 1px solid #aaa;">
-                </div>
-            </div>
-            <div class="m-visual" data-aos="zoom-in">
-                <img src="69.png" alt="Ortho Views" style="border: 4px solid #000;">
-            </div>
-        </section>
-
-        <section class="page-section model-panel">
-            <div class="m-visual"><img src="2.png" alt="Box Render"></div>
-            <div class="m-desc">
-                <h3>The "Help Me" Crate</h3>
-                <p>Hand-painted, narrative-driven stylized prop. focused on texture storytelling and dynamic graffiti aesthetics.</p>
-            </div>
-        </section>
-    </div>
-
-    <div id="manga-gamedev-page" class="page-content">
-        <div class="page-section" style="padding-top: 150px; text-align: center;">
-            <h1 class="panel-title">GAME DEV <span>ARC</span></h1>
-            <p style="color: #666; font-size: 1rem; margin-top: 10px;">c#, unity engine, gameplay mechanics.</p>
-        </div>
-
-        <section class="page-section model-panel">
-            <div class="m-visual" data-aos="fade-right">
-                <div style="position: relative; border: 4px solid #000; border-radius: 0px; overflow: hidden; background: #000;">
-                    <video id="tgp-reel" controls poster="12.png" width="100%">
-                        <source src="15.mp4" type="video/mp4">
-                    </video>
-                </div>
-            </div>
-            <div class="m-desc" data-aos="fade-left">
-                <span class="career-badge">Flagship Studio Project - TenGen Parkour</span>
-                <h3>Momentum & Parkour Systems</h3>
-                <p>Fluid momentum-based movement developed in Unity. As Lead Dev, designing Level 01 with complex urban geometry and modular stylized props.</p>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px;">
-                    <img src="100.png" style="width: 100%; border: 1px solid #ccc;">
-                    <img src="101.png" style="width: 100%; border: 1px solid #ccc;">
-                </div>
-            </div>
-        </section>
-
-        <section class="page-section model-panel">
-            <div class="m-desc" data-aos="fade-right">
-                <h3>Run & Fight (2D Action)</h3>
-                <p>Unity C# side-scroller focusing on combat logic, sprite animation, and hitbox systems.</p>
-                <img src="41.png" style="width: 80%; border: 1px solid #eee; margin-top: 20px;">
-            </div>
-            <div class="m-visual" data-aos="fade-left"><img src="43.png" alt="Gameplay View" style="border: 4px solid #000;"></div>
-        </section>
-
-        <section class="page-section model-panel">
-            <div class="m-visual" data-aos="fade-right">
-                <img src="9.png" alt="Cinematic Composite" style="border: 4px solid #000; margin-bottom: 20px;">
-                <img src="8.png" alt="Lighting View" style="border: 1px solid #333;">
-            </div>
-            <div class="m-desc" data-aos="fade-left">
-                <h3>Modular Tower Architecture</h3>
-                <p>Advanced hard surface environmental visualization focusing on technical props and cinematic composition.</p>
-            </div>
-        </section>
-
-        <section class="page-section model-panel">
-            <div class="m-desc">
-                <h3>Circuit Enthusiasm</h3>
-                <p>Independent practice focusing on basic Arduino logic and hardware integration.</p>
-            </div>
-            <div class="m-visual"><img src="45.png" alt="Arduino Setup" style="border: 1px solid #000; width: 60%;"></div>
-        </section>
-    </div>
-
-    <footer class="studio-footer" id="contact">
-        <h2 style="font-size: 3rem; margin-bottom: 20px;">LET'S <span>COLLABORATE</span></h2>
-        <div style="margin: 40px 0;">
-            <a href="mailto:throneleafgames@gmail.com" style="color: #fff; font-size: 1.8rem; text-decoration: none; font-weight: 900; -webkit-text-stroke: 1px var(--accent);">throneleafgames@gmail.com</a>
-            <p style="margin-top: 10px; color: #555;">cj3243850@gmail.com</p>
-        </div>
-        <div class="social-manga">
-            <a href="https://www.linkedin.com/in/chetan-joshi-50922a2a4/" target="_blank" class="s-manga-circle"><svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
-            <a href="https://www.instagram.com/cjxgamedev/" target="_blank" class="s-manga-circle"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.919-.058-1.265-.069-1.646-.069-4.849 0-3.204.012-3.583.069-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
-            <a href="https://www.gamedevmarket.net/member/chetanjoshi" target="_blank" class="s-manga-circle" style="color:#fff; font-weight:900; font-size:0.7rem;">GDM</a>
-        </div>
-        <footer style="margin-top: 50px; text-align: center; color: #333; font-size: 0.8rem;">
-            © 2026 Chetan Joshi • Lead Developer • EndeavourOS • B.Tech CSE
-        </footer>
-    </footer>
-
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        // Speedy animation (Reduced duration for faster panels)
-        AOS.init({ duration: 400, once: true });
+    <div class="infinite-wrapper" id="loopTarget">
         
-        const bgm = document.getElementById('bgm');
-        const gate = document.getElementById('landing-gate');
-        const ui = document.getElementById('ui-panel');
-        const backBtn = document.getElementById('back-hub');
+        <div class="panel">
+            <div style="text-align: center;">
+                <p style="font-weight: 900; letter-spacing: 10px;">B.TECH CSE • MARCH 11, 2008</p>
+                <h1 style="font-size: 12rem; line-height: 0.8;">CHETAN<br>JOSHI</h1>
+                <p style="font-size: 1.5rem; margin-top: 30px; font-weight: 900; -webkit-text-stroke: 1px #000; color: transparent;">LEAD DEV @ THRONELEAF GAMES</p>
+            </div>
+            <div class="life-line"></div>
+        </div>
 
-        function enterSite() {
-            gate.style.opacity = '0';
-            setTimeout(() => { 
-                gate.style.display = 'none'; 
-                bgm.currentTime = 9; // Skip exactamente 9s
-                bgm.play();
-                ui.classList.remove('paused');
-            }, 800);
-        }
+        <div class="panel">
+            <div class="p-box">
+                <div class="p-img-grid">
+                    <img src="5.jpg" style="grid-column: span 2;">
+                    <img src="54.png"> <img src="56.png">
+                    <img src="61.png"> <img src="6.jpg">
+                </div>
+                <div class="p-text">
+                    <h2>Q-SHIP</h2>
+                    <p>Stylized ring spaceship[cite: 19]. Optimized for RTX 2050[cite: 20]. High-fidelity node-based texturing in Blender[cite: 22].</p>
+                    <div style="margin-top:20px; background:#000; color:#fff; padding:15px; text-align:center; font-weight:900;">BUY ON GDM</div>
+                </div>
+            </div>
+            <div class="life-line"></div>
+        </div>
 
-        // Optimized instant panel switching
-        function switchPanel(panelId) {
-            // instant scroll up
-            window.scrollTo(0, 0);
-            
-            // Hide all pages instant
-            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('page-active'));
-            // Show target page instant
-            document.getElementById(panelId).classList.add('page-active');
-            
-            // Show/Hide back button
-            backBtn.style.display = (panelId === 'home-hub-page') ? 'none' : 'block';
-            
-            // Fast AOS refresh to trigger new panels animations
-            AOS.refresh();
-        }
+        <div class="panel">
+            <div class="p-box" style="background: #f7f7f7;">
+                <div class="p-text">
+                    <h2>TENGEN</h2>
+                    <p>Lead Developer at ThroneLeaf Games[cite: 14]. Modular building assets and movement systems[cite: 16, 17].</p>
+                    <img src="100.png" style="width:100%; border:4px solid #000; margin-top:15px;">
+                </div>
+                <div>
+                    <video controls width="100%" poster="12.png" style="border:4px solid #000;"><source src="15.mp4" type="video/mp4"></video>
+                    <img src="101.png" style="width:100%; margin-top:10px; border:2px solid #000;">
+                </div>
+            </div>
+            <div class="life-line"></div>
+        </div>
 
-        function toggleAudio() {
-            if (bgm.paused) { bgm.play(); ui.classList.remove('paused'); }
-            else { bgm.pause(); ui.classList.add('paused'); }
+        <div class="panel">
+            <div class="p-box">
+                <div class="p-img-grid">
+                    <img src="69.png" style="grid-column: span 2;">
+                    <img src="64.png"> <img src="65.png">
+                </div>
+                <div class="p-text">
+                    <h2>MECHANICS</h2>
+                    <p>Robotic bipedal system design[cite: 19]. Focusing on hydraulic precision and mechanical joints[cite: 23].</p>
+                    <img src="66.png" style="width:100%; margin-top:15px; border:2px solid #000;">
+                </div>
+            </div>
+            <div class="life-line"></div>
+        </div>
+
+        <div class="panel">
+            <div class="p-box">
+                <div class="p-text">
+                    <h2>ASSETS</h2>
+                    <p>Hand-painted "Help Me" Crate[cite: 19]. "Run & Fight" 2D Action mechanics[cite: 24, 25].</p>
+                    <img src="2.png" style="width:100%; border:4px solid #000; margin-top:15px;">
+                </div>
+                <div class="p-img-grid">
+                    <img src="41.png" style="grid-column: span 2;">
+                    <img src="43.png"> <img src="3.png">
+                </div>
+            </div>
+            <div class="life-line"></div>
+        </div>
+
+        <div class="panel">
+            <div class="p-box">
+                <img src="9.png" class="p-main-img" style="height:100%">
+                <div class="p-text">
+                    <h2>TOWER</h2>
+                    <p>Modular architecture[cite: 19]. Hardware enthusiast: Linux optimization for 3D workflows[cite: 13, 31].</p>
+                    <img src="45.png" style="width:60%; margin-top:20px; border:1px solid #000;">
+                </div>
+            </div>
+            <div class="life-line"></div>
+        </div>
+
+    </div>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        function start() {
+            document.getElementById('gate').style.display = 'none';
+            const audio = document.getElementById('bgm');
+            audio.currentTime = 9; audio.play();
+
+            const panels = gsap.utils.toArray(".panel");
+            const loop = gsap.to(panels, {
+                xPercent: -100 * (panels.length - 1),
+                ease: "none",
+                scrollTrigger: {
+                    trigger: ".infinite-wrapper",
+                    pin: true,
+                    scrub: 1,
+                    end: () => "+=" + document.getElementById('loopTarget').offsetWidth
+                }
+            });
+
+            // ProgressBar Logic
+            gsap.to("#progressBar", {
+                width: "100%",
+                ease: "none",
+                scrollTrigger: {
+                    trigger: ".infinite-wrapper",
+                    start: "top top",
+                    end: () => "+=" + document.getElementById('loopTarget').offsetWidth,
+                    scrub: true
+                }
+            });
         }
     </script>
 </body>
