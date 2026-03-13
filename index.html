@@ -3,128 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chetan Joshi | Lead Developer Master Loop</title>
+    <title>Chetan Joshi | Lead Developer Master Loop v4.0</title>
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
     <style>
-        :root { --accent: #458a7d; --bg: #fff; }
+        :root { --accent: #458a7d; --bg: #fff; --manga-border: 8px solid #000; }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--bg); color: #000; font-family: 'Inter', sans-serif; overflow: hidden; }
-
-        /* --- MANGA GUIDE (FIXED POSITION) --- */
-        .manga-character {
-            position: fixed; bottom: 0; left: 0; width: 250px; z-index: 1000;
-            pointer-events: none; transform: scaleX(-1); filter: drop-shadow(10px 10px 0 #000);
+        body { 
+            background: var(--bg); 
+            color: #000; 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden; 
+            overscroll-behavior: none;
         }
-        .speech-bubble {
-            position: fixed; bottom: 200px; left: 100px; background: #000; color: #fff;
-            padding: 15px 25px; border-radius: 0px; z-index: 1001; font-weight: 900;
-            clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 25% 75%, 0% 100%);
-            font-size: 0.8rem; text-transform: uppercase;
+
+        /* --- THE FIXED "LIFE-LINE" (Sits behind everything) --- */
+        .timeline-container {
+            position: fixed; top: 50%; left: 0; width: 100%; height: 10px;
+            background: #eee; z-index: -1; transform: translateY(-50%);
+        }
+        .timeline-fill {
+            position: fixed; top: 50%; left: 0; width: 0%; height: 10px;
+            background: var(--accent); z-index: -1; transform: translateY(-50%);
+        }
+
+        /* --- MANGA CHARACTER GUIDE --- */
+        #manga-guide {
+            position: fixed; bottom: 0; left: 0; width: 220px; z-index: 1000;
+            pointer-events: none; filter: drop-shadow(10px 10px 0 #000); transform: scaleX(-1);
         }
 
         /* --- HORIZONTAL RAIL SYSTEM --- */
-        .scroller-container { display: flex; width: fit-content; height: 100vh; flex-wrap: nowrap; }
-        .manga-panel {
+        .scroller-wrapper {
+            display: flex; width: 800vw; height: 100vh; flex-wrap: nowrap;
+        }
+
+        .panel {
             width: 100vw; height: 100vh; flex-shrink: 0;
             display: flex; align-items: center; justify-content: center;
-            border-right: 20px solid #000; position: relative;
+            border-right: 15px solid #000; position: relative;
         }
 
-        /* --- HERO: Z-FLY TEXT --- */
-        .hero-bg-text {
-            position: absolute; font-family: 'Anton'; font-size: 15vw;
-            color: transparent; -webkit-text-stroke: 4px #000; line-height: 0.8;
-            z-index: 1; pointer-events: none; text-align: center;
+        /* --- HERO: FLYING TEXT --- */
+        .hero-text {
+            font-family: 'Anton'; font-size: 14vw; line-height: 0.8;
+            color: transparent; -webkit-text-stroke: 4px #000;
+            text-align: center; z-index: 10;
         }
 
-        /* --- PROJECT CARDS (NO OVERLAP) --- */
-        .p-card {
-            width: 80vw; height: 80vh; background: #fff; border: 10px solid #000;
-            z-index: 10; padding: 50px; display: grid; grid-template-columns: 1fr 1fr;
-            gap: 40px; box-shadow: 30px 30px 0 #000; position: relative;
-        }
-        .p-visuals img, .p-visuals video { 
-            width: 100%; height: auto; border: 4px solid #000; object-fit: cover;
+        /* --- MANGA CARDS (NO CLIPPING) --- */
+        .manga-card {
+            width: 85vw; height: 80vh; background: #fff;
+            border: var(--manga-border); padding: 40px;
+            display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px;
+            box-shadow: 30px 30px 0 #000; position: relative; z-index: 20;
         }
 
-        /* --- BACKGROUND LINE --- */
-        .life-line {
-            position: fixed; top: 50%; left: 0; width: 100%; height: 6px;
-            background: #eee; z-index: 0; transform: translateY(-50%);
+        .manga-card h2 { font-family: 'Anton'; font-size: 4rem; color: var(--accent); margin-bottom: 20px; }
+        .manga-card p { font-weight: 800; font-size: 1.1rem; line-height: 1.5; color: #333; }
+
+        .visual-box { border: 4px solid #000; background: #000; overflow: hidden; height: 100%; }
+        .visual-box img, .visual-box video { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- NEON INDICATOR --- */
+        .neon-box {
+            position: fixed; top: 30px; right: 30px; z-index: 1000;
+            padding: 10px 20px; border: 3px solid var(--accent);
+            font-family: 'Anton'; color: var(--accent);
+            box-shadow: 0 0 20px var(--accent); animation: pulse 2s infinite;
         }
-        .line-fill {
-            position: fixed; top: 50%; left: 0; width: 0%; height: 6px;
-            background: var(--accent); z-index: 1; transform: translateY(-50%);
-        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
         #gate { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        .btn-gate { padding: 20px 50px; border: 5px solid #fff; color: #fff; background: none; font-family: 'Anton'; font-size: 2rem; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div id="gate"><button class="btn-gate" onclick="startApp()">START LOOP</button></div>
+    <div id="gate"><button onclick="startLoop()" style="color:#fff; border:4px solid #fff; background:none; padding:20px 40px; font-family:'Anton'; font-size:2rem; cursor:pointer;">LOAD CHAPTER</button></div>
     <audio id="bgm" loop src="S.mp3"></audio>
 
-    <div class="life-line"></div>
-    <div class="line-fill" id="progressLine"></div>
+    <div class="timeline-container"></div>
+    <div class="timeline-fill" id="fill"></div>
+    <div class="neon-box">LOOP: ACTIVE</div>
+    
+    <img src="CJ.png" id="manga-guide">
 
-    <img src="CJ.png" class="manga-character">
-    <div class="speech-bubble" id="statusBubble">Initiating...</div>
-
-    <div class="scroller-container" id="masterContainer">
+    <div class="scroller-wrapper" id="master">
         
-        <section class="manga-panel">
-            <h1 class="hero-bg-text" id="flyName">CHETAN<br>JOSHI</h1>
-            <div style="z-index: 5; text-align: center;">
-                <p style="font-weight: 900; letter-spacing: 10px; color: var(--accent);">LEAD DEVELOPER @ THRONELEAF</p>
+        <section class="panel">
+            <h1 class="hero-text" id="flyText">CHETAN<br>JOSHI</h1>
+            <div style="position:absolute; bottom:10%; text-align:center; z-index:50;">
+                <p style="font-weight:900; letter-spacing:10px; background:#fff; padding:5px 15px;">LEAD DEVELOPER • 2008</p>
             </div>
         </section>
 
-        <section class="manga-panel">
-            <div class="p-card">
-                <div class="p-visuals">
+        <section class="panel">
+            <div class="manga-card">
+                <div class="visual-box">
                     <img src="5.jpg">
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:20px;">
-                        <img src="54.png"> <img src="61.png">
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:15px; background:#fff; padding:10px;">
+                        <img src="54.png" style="border:2px solid #000;"> <img src="61.png" style="border:2px solid #000;">
                     </div>
                 </div>
-                <div style="padding-left:30px;">
-                    <h2 style="font-family:'Anton'; font-size:5rem; color:var(--accent);">Q-SHIP</h2>
-                    <p style="font-weight: 900; margin-top:20px;">Hard Surface Modeling. Optimized for RTX 2050. High-fidelity rendering workflow.</p>
-                    <button style="margin-top:30px; background:#000; color:#fff; padding:15px; width:100%; font-weight:900;">BUY ON GDM</button>
+                <div style="padding-left:20px;">
+                    <h2>Q-SHIP</h2>
+                    <p>Stylized ring spaceship. Stage 2: Detailed shader node breakdown. RTX 2050 Optimized.</p>
+                    <div style="margin-top:40px; background:#000; color:#fff; padding:20px; font-weight:900; text-align:center;">GDM MARKETPLACE</div>
                 </div>
             </div>
         </section>
 
-        <section class="manga-panel">
-            <div class="p-card" style="background:#000; color:#fff; border-color:#fff;">
-                <div class="p-visuals">
-                    <video autoplay muted loop poster="12.png" style="border-color:#fff;">
-                        <source src="15.mp4" type="video/mp4">
-                    </video>
-                </div>
-                <div style="padding-left:30px;">
-                    <h2 style="font-family:'Anton'; font-size:5rem; color:var(--accent);">TENGEN</h2>
-                    <p style="font-weight: 900;">Flagship Game Dev. Level 01 Architecture. Modular system design.</p>
-                    <img src="101.png" style="width:100%; border:2px solid #fff; margin-top:20px;">
-                </div>
-            </div>
-        </section>
-
-        <section class="manga-panel">
-            <div class="p-card">
-                <div class="p-visuals">
-                    <img src="69.png">
-                </div>
-                <div style="padding-left:30px;">
-                    <h2 style="font-family:'Anton'; font-size:5rem;">ROBOTICS</h2>
-                    <p style="font-weight: 900;">Bipedal Mechanics. Hydro-precision joints. Blender pipeline.</p>
+        <section class="panel">
+            <div class="manga-card">
+                <div class="visual-box"><img src="69.png"></div>
+                <div>
+                    <h2>MECHANICS</h2>
+                    <p>Bipedal movement systems. Focusing on hydraulic precision joints and mechanical integrity.</p>
                     <div style="display:flex; gap:10px; margin-top:20px;">
                         <img src="64.png" style="width:45%; border:2px solid #000;">
                         <img src="65.png" style="width:45%; border:2px solid #000;">
@@ -133,14 +131,49 @@
             </div>
         </section>
 
-        <section class="manga-panel">
-            <div style="text-align: center;">
-                <h1 style="font-family:'Anton'; font-size:10rem; line-height:0.8;">LET'S<br>BUILD</h1>
-                <p style="font-weight: 900; color:var(--accent); font-size:1.5rem; margin-top:20px;">throneleafgames@gmail.com</p>
-                <div style="margin-top:40px; display:flex; justify-content:center; gap:20px;">
-                    <span style="border:4px solid #000; padding:15px 30px; font-weight:900;">GITHUB</span>
-                    <span style="border:4px solid #000; padding:15px 30px; font-weight:900;">INSTA</span>
+        <section class="panel">
+            <div class="manga-card" style="background:#000; color:#fff; border-color:#fff;">
+                <div class="visual-box" style="border-color:#fff;">
+                    <video autoplay muted loop poster="12.png"><source src="15.mp4" type="video/mp4"></video>
                 </div>
+                <div style="padding-left:20px;">
+                    <h2 style="color:var(--accent);">TENGEN</h2>
+                    <p>Flagship studio project. Momentum-based movement. Level 01 urban geometry architecture.</p>
+                    <img src="101.png" style="width:100%; margin-top:20px; border:2px solid #fff;">
+                </div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="manga-card">
+                <div class="visual-box"><img src="2.png"></div>
+                <div>
+                    <h2>HELP ME</h2>
+                    <p>Hand-painted narrative prop. Texture-driven storytelling study.</p>
+                    <img src="3.png" style="width:100%; margin-top:20px; opacity:0.3;">
+                </div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="manga-card">
+                <div class="visual-box"><img src="9.png"></div>
+                <div>
+                    <h2>TOWER</h2>
+                    <p>Sci-Fi architecture. Optimized for mid-range GPU performance.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div style="text-align:center;">
+                <h1 style="font-size:10rem; line-height:0.8;">LET'S<br>WORK</h1>
+                <p style="font-weight:900; color:var(--accent); font-size:1.5rem; margin-top:20px;">throneleafgames@gmail.com</p>
+                <div style="margin-top:40px; display:flex; gap:20px; justify-content:center;">
+                    <span style="border:5px solid #000; padding:15px 30px; font-weight:900;">LinkedIn</span>
+                    <span style="border:5px solid #000; padding:15px 30px; font-weight:900;">Instagram</span>
+                </div>
+                <p style="margin-top:60px; font-weight:900; letter-spacing:10px; opacity:0.1;">RESTARTING CYCLE...</p>
             </div>
         </section>
 
@@ -149,47 +182,41 @@
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        function startApp() {
+        function startLoop() {
             document.getElementById('gate').style.display = 'none';
             document.getElementById('bgm').currentTime = 9;
             document.getElementById('bgm').play();
 
-            const panels = gsap.utils.toArray(".manga-panel");
+            const panels = gsap.utils.toArray(".panel");
             
-            // MASTER HORIZONTAL SCROLL
+            // MAIN HORIZONTAL SCROLL
             let scrollTween = gsap.to(panels, {
                 xPercent: -100 * (panels.length - 1),
                 ease: "none",
                 scrollTrigger: {
-                    trigger: ".scroller-container",
+                    trigger: ".scroller-wrapper",
                     pin: true,
                     scrub: 1,
-                    end: () => "+=" + document.getElementById('masterContainer').offsetWidth,
+                    end: () => "+=" + document.getElementById('master').offsetWidth,
                     onUpdate: (self) => {
-                        // FILL LINE LOGIC
-                        gsap.to("#progressLine", { width: (self.progress * 100) + "%", duration: 0.1 });
+                        // PROGRESS LINE SYNC (Behind content)
+                        gsap.to("#fill", { width: (self.progress * 100) + "%", duration: 0.1 });
                         
-                        // BUBBLE STATUS
-                        const bubble = document.getElementById('statusBubble');
-                        if(self.progress > 0.1) bubble.innerText = "Check this 3D art!";
-                        if(self.progress > 0.4) bubble.innerText = "Tengen is coming!";
-                        if(self.progress > 0.8) bubble.innerText = "Let's connect!";
-
-                        // INFINITE JUMP
-                        if(self.progress > 0.99) self.scroll(10);
+                        // INFINITE LOOP JUMP
+                        if (self.progress > 0.99) self.scroll(10);
                     }
                 }
             });
 
-            // HERO FLY ANIMATION
-            gsap.to("#flyName", {
+            // HERO Z-AXIS FLY
+            gsap.to("#flyText", {
                 z: -5000,
                 opacity: 0,
                 scrollTrigger: {
-                    trigger: ".scroller-container",
+                    trigger: ".scroller-wrapper",
                     start: "top top",
                     scrub: true,
-                    end: "20% top"
+                    end: "15% top"
                 }
             });
         }
