@@ -3,170 +3,314 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chetan Joshi | ThroneLeaf Games Infinite Loop</title>
+    <title>Chetan Joshi | Lead Developer Infinite Loop</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
     <style>
-        :root { --bg: #fff; --text: #000; --accent: #458a7d; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        h1, h2 { font-family: 'Anton', sans-serif; text-transform: uppercase; }
-
-        /* --- MANGA CHARACTER GUIDE --- */
-        #manga-guide {
-            position: fixed; bottom: 20px; left: 50px; width: 150px; z-index: 1000;
-            pointer-events: none; transform: scaleX(-1); animation: float 3s ease-in-out infinite;
+        :root {
+            --bg: #fff;
+            --text: #000;
+            --accent: #458a7d;
+            --neon: #00f2ff;
         }
-        @keyframes float { 0%, 100% { transform: translateY(0) scaleX(-1); } 50% { transform: translateY(-20px) scaleX(-1); } }
 
-        /* --- INFINITE WRAPPER --- */
-        .infinite-wrapper { display: flex; width: fit-content; height: 100vh; flex-wrap: nowrap; }
-        .panel { width: 100vw; height: 100vh; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: relative; border-right: 10px solid #000; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: var(--bg); 
+            color: var(--text); 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden;
+            overscroll-behavior: none;
+        }
 
-        /* --- THE CONTINUOUS LINE --- */
-        .life-line { position: absolute; top: 50%; left: 0; width: 100%; height: 8px; background: #000; z-index: 1; }
-        .fill-progress { position: fixed; top: 50%; left: 0; height: 8px; background: var(--accent); z-index: 2; width: 0%; }
+        /* --- MANGA TEXTURES --- */
+        body::before {
+            content: "";
+            position: fixed; inset: 0;
+            background-image: radial-gradient(#000 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.03; z-index: -1;
+        }
 
-        /* --- MANGA PANELS (ALL PROJECTS) --- */
-        .p-box { position: relative; z-index: 10; background: #fff; border: 8px solid #000; padding: 30px; width: 85vw; height: 75vh; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; box-shadow: 25px 25px 0 #000; overflow: hidden; }
-        .p-img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .p-img-grid img { width: 100%; border: 3px solid #000; object-fit: cover; }
-        .p-main-img { border: 4px solid #000; width: 100%; height: 300px; object-fit: cover; margin-bottom: 15px; }
+        /* --- NEON INFINITE INDICATOR --- */
+        .neon-indicator {
+            position: fixed; top: 30px; right: 30px;
+            width: 100px; height: 100px; border-radius: 50%;
+            border: 2px solid var(--accent);
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Anton'; font-size: 0.7rem; color: var(--accent);
+            text-align: center; z-index: 1000;
+            box-shadow: 0 0 20px rgba(69, 138, 125, 0.4);
+            animation: rotate 10s linear infinite, glow 2s ease-in-out infinite;
+        }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 20px rgba(69, 138, 125, 0.4); } 50% { box-shadow: 0 0 40px var(--accent); } }
+
+        /* --- HORIZONTAL WRAPPER --- */
+        .master-container {
+            display: flex;
+            width: 800vw; /* 8 stages */
+            height: 100vh;
+            flex-wrap: nowrap;
+        }
+
+        .section-panel {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            flex-shrink: 0;
+            border-right: 15px solid #000;
+            overflow: hidden;
+        }
+
+        /* --- SCROLL LINE --- */
+        .scroll-line {
+            position: fixed; top: 50%; left: 0; width: 0%; height: 6px;
+            background: var(--accent); z-index: 900; transform: translateY(-50%);
+        }
+
+        /* --- STAGE 1: HERO (Z-AXIS REVEAL) --- */
+        .hero-wrap {
+            display: grid; grid-template-columns: 1fr 1fr;
+            width: 85%; height: 80%; align-items: center;
+            position: relative; z-index: 10;
+        }
+        .hero-img { 
+            height: 90%; width: 100%; object-fit: contain; 
+            filter: drop-shadow(20px 20px 0 #000);
+            transform-origin: center;
+        }
+        .hero-text-wrap { position: relative; perspective: 1000px; }
+        .fly-text {
+            font-family: 'Anton'; font-size: 10rem; line-height: 0.8;
+            letter-spacing: -5px; transform-style: preserve-3d;
+        }
+
+        /* --- STAGE 2-5: LAYERED REVEAL CARDS --- */
+        .model-card {
+            width: 80%; height: 70%; background: #fff;
+            border: 10px solid #000; box-shadow: 30px 30px 0 #000;
+            display: grid; grid-template-columns: 1.2fr 0.8fr;
+            padding: 40px; position: relative; transition: 0.5s;
+        }
+        .reveal-stage-1 { transform: scale(0.9); opacity: 0.5; }
+        .reveal-stage-2 { transform: scale(1); opacity: 1; }
+
+        .visual-container { border-right: 5px solid #000; padding-right: 30px; position: relative; }
+        .visual-container img, .visual-container video { width: 100%; border: 3px solid #000; }
         
-        .p-text h2 { font-size: 5rem; color: var(--accent); margin-bottom: 10px; }
-        .p-text p { font-size: 1.1rem; font-weight: 800; line-height: 1.4; color: #444; }
+        .detail-pane { padding-left: 30px; display: flex; flex-direction: column; justify-content: center; }
+        .detail-pane h2 { font-size: 5rem; color: var(--accent); margin-bottom: 20px; }
+        .detail-pane p { font-size: 1.2rem; font-weight: 800; line-height: 1.6; }
 
-        /* --- LANDING --- */
-        #gate { position: fixed; inset: 0; background: #000; z-index: 9000; display: flex; align-items: center; justify-content: center; }
-        .enter-btn { padding: 20px 60px; border: 4px solid #fff; color: #fff; background: transparent; font-family: 'Anton'; font-size: 2rem; cursor: pointer; }
+        /* --- STAGE 6: GLITCH TRANSITION --- */
+        .glitch-text { font-family: 'Anton'; font-size: 6rem; text-align: center; }
+
+        /* --- CONTACT & ICONS --- */
+        .contact-grid { display: flex; gap: 30px; margin-top: 40px; }
+        .icon-box {
+            width: 80px; height: 80px; border: 4px solid #000;
+            display: flex; align-items: center; justify-content: center;
+            transition: 0.3s; cursor: pointer; background: #fff;
+        }
+        .icon-box:hover { 
+            background: var(--accent); transform: translateY(-10px); 
+            box-shadow: 0 10px 30px var(--accent); 
+        }
+
+        /* --- GATE --- */
+        #gate {
+            position: fixed; inset: 0; background: #000; z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .gate-btn {
+            padding: 25px 60px; border: 5px solid #fff; color: #fff;
+            background: transparent; font-family: 'Anton'; font-size: 2rem;
+            cursor: pointer; letter-spacing: 5px;
+        }
     </style>
 </head>
 <body>
 
-    <div id="gate"><button class="enter-btn" onclick="start()">INITIATE LOOP</button></div>
+    <div id="gate"><button class="gate-btn" onclick="init()">ENTER WORKSPACE</button></div>
+
+    <div class="neon-indicator">ENTER THE<br>INFINITE LOOP</div>
+    <div class="scroll-line" id="line"></div>
     <audio id="bgm" loop src="S.mp3"></audio>
 
-    <img id="manga-guide" src="CJ.png" alt="Guide">
-
-    <div class="fill-progress" id="progressBar"></div>
-
-    <div class="infinite-wrapper" id="loopTarget">
+    <div class="master-container" id="master">
         
-        <div class="panel">
-            <div style="text-align: center;">
-                <p style="font-weight: 900; letter-spacing: 10px;">B.TECH CSE • MARCH 11, 2008</p>
-                <h1 style="font-size: 12rem; line-height: 0.8;">CHETAN<br>JOSHI</h1>
-                <p style="font-size: 1.5rem; margin-top: 30px; font-weight: 900; -webkit-text-stroke: 1px #000; color: transparent;">LEAD DEV @ THRONELEAF GAMES</p>
-            </div>
-            <div class="life-line"></div>
-        </div>
-
-        <div class="panel">
-            <div class="p-box">
-                <div class="p-img-grid">
-                    <img src="5.jpg" style="grid-column: span 2;">
-                    <img src="54.png"> <img src="56.png">
-                    <img src="61.png"> <img src="6.jpg">
+        <section class="section-panel" id="hero">
+            <div class="hero-wrap">
+                <img src="CJ.png" class="hero-img" id="heroImg">
+                <div class="hero-text-wrap">
+                    <p style="font-weight: 900; letter-spacing: 10px; color: var(--accent);">LEAD DEV • 2008</p>
+                    <h1 class="fly-text" id="heroText">CHETAN<br>JOSHI</h1>
                 </div>
-                <div class="p-text">
+            </div>
+        </section>
+
+        <section class="section-panel">
+            <div class="model-card" id="qshipCard">
+                <div class="visual-container">
+                    <img src="5.jpg">
+                    <div style="display:flex; gap:10px; margin-top:20px;">
+                        <img src="54.png" style="width:30%">
+                        <img src="56.png" style="width:30%">
+                        <img src="61.png" style="width:30%">
+                    </div>
+                </div>
+                <div class="detail-pane">
                     <h2>Q-SHIP</h2>
-                    <p>Stylized ring spaceship[cite: 19]. Optimized for RTX 2050[cite: 20]. High-fidelity node-based texturing in Blender[cite: 22].</p>
-                    <div style="margin-top:20px; background:#000; color:#fff; padding:15px; text-align:center; font-weight:900;">BUY ON GDM</div>
+                    <p>Stylized ring spaceship. Stage 1: Design Tease. Stage 2: 4K Node-based textures and RTX 2050 optimization breakdown.</p>
+                    <button style="margin-top:30px; background:#000; color:#fff; padding:15px; font-weight:900;">BUY ON GDM</button>
                 </div>
             </div>
-            <div class="life-line"></div>
-        </div>
+        </section>
 
-        <div class="panel">
-            <div class="p-box" style="background: #f7f7f7;">
-                <div class="p-text">
-                    <h2>TENGEN</h2>
-                    <p>Lead Developer at ThroneLeaf Games[cite: 14]. Modular building assets and movement systems[cite: 16, 17].</p>
-                    <img src="100.png" style="width:100%; border:4px solid #000; margin-top:15px;">
+        <section class="section-panel">
+            <div class="model-card">
+                <div class="visual-container">
+                    <img src="69.png">
                 </div>
-                <div>
-                    <video controls width="100%" poster="12.png" style="border:4px solid #000;"><source src="15.mp4" type="video/mp4"></video>
-                    <img src="101.png" style="width:100%; margin-top:10px; border:2px solid #000;">
-                </div>
-            </div>
-            <div class="life-line"></div>
-        </div>
-
-        <div class="panel">
-            <div class="p-box">
-                <div class="p-img-grid">
-                    <img src="69.png" style="grid-column: span 2;">
-                    <img src="64.png"> <img src="65.png">
-                </div>
-                <div class="p-text">
+                <div class="detail-pane">
                     <h2>MECHANICS</h2>
-                    <p>Robotic bipedal system design[cite: 19]. Focusing on hydraulic precision and mechanical joints[cite: 23].</p>
-                    <img src="66.png" style="width:100%; margin-top:15px; border:2px solid #000;">
+                    <p>Bipedal movement systems. High-detail mechanical modeling in Blender focusing on hydraulics and structural integrity.</p>
+                    <div style="display:flex; gap:10px; margin-top:15px;">
+                        <img src="64.png" style="width:30%"> <img src="65.png" style="width:30%">
+                    </div>
                 </div>
             </div>
-            <div class="life-line"></div>
-        </div>
+        </section>
 
-        <div class="panel">
-            <div class="p-box">
-                <div class="p-text">
+        <section class="section-panel" style="background:#000; color:#fff;">
+            <div class="glitch-text" id="glitchTitle">GAME DEV<br>JOURNEY</div>
+        </section>
+
+        <section class="section-panel">
+            <div class="model-card" style="background: #f7f7f7;">
+                <div class="visual-container">
+                    <video autoplay muted loop poster="12.png" style="border:5px solid #000;">
+                        <source src="15.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="detail-pane">
+                    <h2>TENGEN</h2>
+                    <p>FLAGSHIP PROJECT. Momentum-based parkour systems. Level 01 urban geometry and environment architecture.</p>
+                    <img src="100.png" style="margin-top:20px; border:2px solid #000;">
+                </div>
+            </div>
+        </section>
+
+        <section class="section-panel">
+            <div class="model-card">
+                <div class="visual-container">
+                    <img src="2.png">
+                    <img src="3.png" style="margin-top:10px; opacity:0.3;">
+                </div>
+                <div class="detail-pane">
                     <h2>ASSETS</h2>
-                    <p>Hand-painted "Help Me" Crate[cite: 19]. "Run & Fight" 2D Action mechanics[cite: 24, 25].</p>
-                    <img src="2.png" style="width:100%; border:4px solid #000; margin-top:15px;">
-                </div>
-                <div class="p-img-grid">
-                    <img src="41.png" style="grid-column: span 2;">
-                    <img src="43.png"> <img src="3.png">
+                    <p>Run & Fight 2D Action Logic. Hand-painted stylized props. 50+ Modular assets for Unity.</p>
+                    <img src="41.png" style="margin-top:20px; border:1px solid #000;">
                 </div>
             </div>
-            <div class="life-line"></div>
-        </div>
+        </section>
 
-        <div class="panel">
-            <div class="p-box">
-                <img src="9.png" class="p-main-img" style="height:100%">
-                <div class="p-text">
-                    <h2>TOWER</h2>
-                    <p>Modular architecture[cite: 19]. Hardware enthusiast: Linux optimization for 3D workflows[cite: 13, 31].</p>
-                    <img src="45.png" style="width:60%; margin-top:20px; border:1px solid #000;">
+        <section class="section-panel" id="contactStage">
+            <div style="text-align:center;">
+                <h1 style="font-size: 8rem; line-height:0.8;">LET'S<br>BUILD</h1>
+                <a href="mailto:throneleafgames@gmail.com" style="font-size:2rem; font-weight:900; color:var(--accent); text-decoration:none;">throneleafgames@gmail.com</a>
+                <div class="contact-grid">
+                    <div class="icon-box">IN</div> <div class="icon-box">FB</div> 
+                    <div class="icon-box">IG</div> <div class="icon-box">GDM</div>
                 </div>
+                <p style="margin-top:50px; font-weight:900; letter-spacing:10px; opacity:0.2;">INFINITE LOOP ACTIVE</p>
             </div>
-            <div class="life-line"></div>
-        </div>
+        </section>
 
     </div>
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        function start() {
+        function init() {
             document.getElementById('gate').style.display = 'none';
-            const audio = document.getElementById('bgm');
-            audio.currentTime = 9; audio.play();
+            document.getElementById('bgm').currentTime = 9;
+            document.getElementById('bgm').play();
 
-            const panels = gsap.utils.toArray(".panel");
-            const loop = gsap.to(panels, {
-                xPercent: -100 * (panels.length - 1),
+            const sections = gsap.utils.toArray(".section-panel");
+            
+            // 1. Horizontal Scroll Trigger
+            let scrollTween = gsap.to(sections, {
+                xPercent: -100 * (sections.length - 1),
                 ease: "none",
                 scrollTrigger: {
-                    trigger: ".infinite-wrapper",
+                    trigger: ".master-container",
                     pin: true,
                     scrub: 1,
-                    end: () => "+=" + document.getElementById('loopTarget').offsetWidth
+                    end: () => "+=" + document.querySelector(".master-container").offsetWidth,
+                    onUpdate: (self) => {
+                        // Line Fill Logic
+                        gsap.to("#line", { width: (self.progress * 100) + "%", duration: 0.1 });
+                        
+                        // Infinite Jump Logic
+                        if (self.progress > 0.99) {
+                            self.scroll(10); // Smooth jump back to start
+                        }
+                    }
                 }
             });
 
-            // ProgressBar Logic
-            gsap.to("#progressBar", {
-                width: "100%",
-                ease: "none",
+            // 2. Hero Z-Axis Animation
+            gsap.to("#heroText", {
+                z: -5000, opacity: 0,
                 scrollTrigger: {
-                    trigger: ".infinite-wrapper",
-                    start: "top top",
-                    end: () => "+=" + document.getElementById('loopTarget').offsetWidth,
+                    trigger: "#hero",
+                    start: "left left",
+                    containerAnimation: scrollTween,
                     scrub: true
                 }
+            });
+
+            gsap.to("#heroImg", {
+                x: -200, scale: 0.8,
+                scrollTrigger: {
+                    trigger: "#hero",
+                    start: "left left",
+                    containerAnimation: scrollTween,
+                    scrub: true
+                }
+            });
+
+            // 3. Glitch Reveal
+            gsap.from("#glitchTitle", {
+                skewX: 45, opacity: 0,
+                scrollTrigger: {
+                    trigger: "#glitchTitle",
+                    containerAnimation: scrollTween,
+                    start: "left center",
+                    scrub: true
+                }
+            });
+
+            // 4. Two-Stage Reveal for Model Cards
+            document.querySelectorAll(".model-card").forEach(card => {
+                gsap.from(card, {
+                    scale: 0.8, opacity: 0, y: 100,
+                    scrollTrigger: {
+                        trigger: card,
+                        containerAnimation: scrollTween,
+                        start: "left center",
+                        end: "center center",
+                        scrub: true
+                    }
+                });
             });
         }
     </script>
