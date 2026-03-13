@@ -3,177 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chetan Joshi | Lead Developer Master Loop v4.0</title>
+    <title>CJ | Lead Developer | ThroneLeaf Games</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
     <style>
-        :root { --accent: #458a7d; --bg: #fff; --manga-border: 8px solid #000; }
+        :root { --accent: #458a7d; --bg: #000; --panel-bg: #0a0a0a; }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             background: var(--bg); 
-            color: #000; 
-            font-family: 'Inter', sans-serif; 
+            color: #fff; 
+            font-family: 'Space Grotesk', sans-serif; 
             overflow-x: hidden; 
             overscroll-behavior: none;
         }
 
-        /* --- THE FIXED "LIFE-LINE" (Sits behind everything) --- */
-        .timeline-container {
-            position: fixed; top: 50%; left: 0; width: 100%; height: 10px;
-            background: #eee; z-index: -1; transform: translateY(-50%);
-        }
-        .timeline-fill {
-            position: fixed; top: 50%; left: 0; width: 0%; height: 10px;
-            background: var(--accent); z-index: -1; transform: translateY(-50%);
+        /* --- CYBER GLITCH TEXTURE --- */
+        .overlay-grid {
+            position: fixed; inset: 0;
+            background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            z-index: 1000; pointer-events: none; opacity: 0.3;
         }
 
-        /* --- MANGA CHARACTER GUIDE --- */
-        #manga-guide {
-            position: fixed; bottom: 0; left: 0; width: 220px; z-index: 1000;
-            pointer-events: none; filter: drop-shadow(10px 10px 0 #000); transform: scaleX(-1);
+        /* --- FLOATING MANGA HOLOGRAM --- */
+        #hologram-guide {
+            position: fixed; bottom: 20px; left: 20px; width: 180px; 
+            z-index: 2000; filter: drop-shadow(0 0 15px var(--accent)) grayscale(1);
+            opacity: 0.7; animation: glitch-anim 4s infinite;
+        }
+        @keyframes glitch-anim {
+            0% { transform: translate(0); }
+            2% { transform: translate(-5px, 2px); }
+            4% { transform: translate(5px, -2px); }
+            6% { transform: translate(0); }
+            100% { transform: translate(0); }
         }
 
-        /* --- HORIZONTAL RAIL SYSTEM --- */
-        .scroller-wrapper {
-            display: flex; width: 800vw; height: 100vh; flex-wrap: nowrap;
+        /* --- THE INFINITE RAIL --- */
+        .master-rail {
+            display: flex; width: 900vw; height: 100vh; flex-wrap: nowrap;
         }
 
-        .panel {
+        .totem-panel {
             width: 100vw; height: 100vh; flex-shrink: 0;
             display: flex; align-items: center; justify-content: center;
-            border-right: 15px solid #000; position: relative;
+            position: relative; border-right: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* --- HERO: FLYING TEXT --- */
-        .hero-text {
-            font-family: 'Anton'; font-size: 14vw; line-height: 0.8;
-            color: transparent; -webkit-text-stroke: 4px #000;
-            text-align: center; z-index: 10;
+        /* --- HERO: THE VOID --- */
+        .hero-title {
+            font-family: 'Anton'; font-size: 18vw; line-height: 0.8;
+            color: #fff; text-align: center; z-index: 10;
+            text-shadow: 0 0 30px rgba(255,255,255,0.2);
         }
 
-        /* --- MANGA CARDS (NO CLIPPING) --- */
-        .manga-card {
-            width: 85vw; height: 80vh; background: #fff;
-            border: var(--manga-border); padding: 40px;
-            display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px;
-            box-shadow: 30px 30px 0 #000; position: relative; z-index: 20;
+        /* --- PROJECT BLOCKS: CYBER PANELS --- */
+        .cyber-card {
+            width: 90vw; height: 85vh; background: var(--panel-bg);
+            border: 1px solid #333; display: grid; grid-template-columns: 1.3fr 0.7fr;
+            gap: 20px; padding: 30px; position: relative;
+            box-shadow: 0 0 100px rgba(0,0,0,1);
+        }
+        .cyber-card::before {
+            content: "SYSTEM.PROJECT_v5.0";
+            position: absolute; top: -15px; left: 20px;
+            background: var(--accent); color: #000; font-weight: 900;
+            padding: 2px 10px; font-size: 0.7rem;
         }
 
-        .manga-card h2 { font-family: 'Anton'; font-size: 4rem; color: var(--accent); margin-bottom: 20px; }
-        .manga-card p { font-weight: 800; font-size: 1.1rem; line-height: 1.5; color: #333; }
-
-        .visual-box { border: 4px solid #000; background: #000; overflow: hidden; height: 100%; }
-        .visual-box img, .visual-box video { width: 100%; height: 100%; object-fit: cover; }
-
-        /* --- NEON INDICATOR --- */
-        .neon-box {
-            position: fixed; top: 30px; right: 30px; z-index: 1000;
-            padding: 10px 20px; border: 3px solid var(--accent);
-            font-family: 'Anton'; color: var(--accent);
-            box-shadow: 0 0 20px var(--accent); animation: pulse 2s infinite;
+        .visual-display { 
+            border: 1px solid #444; background: #000; overflow: hidden;
+            position: relative;
         }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .visual-display img, .visual-display video { 
+            width: 100%; height: 100%; object-fit: cover; 
+            transition: transform 0.5s;
+        }
+        .visual-display:hover img { transform: scale(1.05); }
 
-        #gate { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        .info-display { padding: 20px; display: flex; flex-direction: column; justify-content: space-between; }
+        .info-display h2 { font-family: 'Anton'; font-size: 6rem; color: var(--accent); line-height: 1; }
+        .info-display p { color: #888; font-size: 1.1rem; line-height: 1.6; margin-top: 20px; }
+
+        .tech-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+        .tag { border: 1px solid #444; padding: 5px 12px; font-size: 0.7rem; color: #666; font-weight: 900; text-transform: uppercase; }
+
+        /* --- SCROLL PROGRESS LINE --- */
+        .rail-line {
+            position: fixed; bottom: 50px; left: 10%; width: 80%; height: 2px;
+            background: #222; z-index: 1500;
+        }
+        .rail-fill {
+            position: absolute; top: 0; left: 0; height: 100%;
+            background: var(--accent); width: 0%; box-shadow: 0 0 15px var(--accent);
+        }
+
+        /* --- GATE --- */
+        #init-gate {
+            position: fixed; inset: 0; background: #000; z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .init-btn {
+            background: transparent; color: #fff; border: 1px solid #fff;
+            padding: 20px 60px; font-family: 'Anton'; font-size: 2rem;
+            cursor: pointer; transition: 0.3s;
+        }
+        .init-btn:hover { background: #fff; color: #000; box-shadow: 0 0 40px #fff; }
+
+        @media (max-width: 768px) {
+            .cyber-card { grid-template-columns: 1fr; height: auto; }
+            .info-display h2 { font-size: 3rem; }
+        }
     </style>
 </head>
 <body>
 
-    <div id="gate"><button onclick="startLoop()" style="color:#fff; border:4px solid #fff; background:none; padding:20px 40px; font-family:'Anton'; font-size:2rem; cursor:pointer;">LOAD CHAPTER</button></div>
+    <div id="init-gate">
+        <p style="letter-spacing: 10px; margin-bottom: 20px; color: #333;">THRONELEAF_SYSTEM_v5</p>
+        <button class="init-btn" onclick="engageLoop()">BOOT SYSTEM</button>
+    </div>
+
+    <div class="overlay-grid"></div>
     <audio id="bgm" loop src="S.mp3"></audio>
 
-    <div class="timeline-container"></div>
-    <div class="timeline-fill" id="fill"></div>
-    <div class="neon-box">LOOP: ACTIVE</div>
-    
-    <img src="CJ.png" id="manga-guide">
+    <div class="rail-line"><div class="rail-fill" id="progressFill"></div></div>
 
-    <div class="scroller-wrapper" id="master">
+    <img src="CJ.png" id="hologram-guide">
+
+    <div class="master-rail" id="rail">
         
-        <section class="panel">
-            <h1 class="hero-text" id="flyText">CHETAN<br>JOSHI</h1>
-            <div style="position:absolute; bottom:10%; text-align:center; z-index:50;">
-                <p style="font-weight:900; letter-spacing:10px; background:#fff; padding:5px 15px;">LEAD DEVELOPER • 2008</p>
-            </div>
+        <section class="totem-panel">
+            <h1 class="hero-title" id="flyTitle">CHETAN<br>JOSHI</h1>
         </section>
 
-        <section class="panel">
-            <div class="manga-card">
-                <div class="visual-box">
+        <section class="totem-panel">
+            <div class="cyber-card">
+                <div class="visual-display">
                     <img src="5.jpg">
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:15px; background:#fff; padding:10px;">
-                        <img src="54.png" style="border:2px solid #000;"> <img src="61.png" style="border:2px solid #000;">
+                    <div style="position:absolute; bottom:10px; right:10px; display:flex; gap:10px;">
+                        <img src="54.png" style="width:100px; border:1px solid #fff;">
+                        <img src="61.png" style="width:100px; border:1px solid #fff;">
                     </div>
                 </div>
-                <div style="padding-left:20px;">
-                    <h2>Q-SHIP</h2>
-                    <p>Stylized ring spaceship. Stage 2: Detailed shader node breakdown. RTX 2050 Optimized.</p>
-                    <div style="margin-top:40px; background:#000; color:#fff; padding:20px; font-weight:900; text-align:center;">GDM MARKETPLACE</div>
+                <div class="info-display">
+                    <div>
+                        <h2>Q-SHIP</h2>
+                        <p>STYLIZED HARD SURFACE SPACESHIP. OPTIMIZED FOR RTX 2050 WORKFLOWS. SHADER-NODE DRIVEN TEXTURING.</p>
+                        <div class="tech-tags">
+                            <span class="tag">Blender</span><span class="tag">Unity</span><span class="tag">PBR</span>
+                        </div>
+                    </div>
+                    <button style="background:var(--accent); color:#000; border:none; padding:15px; font-weight:900; cursor:pointer;">ACQUIRE ON GDM</button>
                 </div>
             </div>
         </section>
 
-        <section class="panel">
-            <div class="manga-card">
-                <div class="visual-box"><img src="69.png"></div>
-                <div>
-                    <h2>MECHANICS</h2>
-                    <p>Bipedal movement systems. Focusing on hydraulic precision joints and mechanical integrity.</p>
-                    <div style="display:flex; gap:10px; margin-top:20px;">
-                        <img src="64.png" style="width:45%; border:2px solid #000;">
-                        <img src="65.png" style="width:45%; border:2px solid #000;">
+        <section class="totem-panel">
+            <div class="cyber-card" style="border-color: var(--accent);">
+                <div class="visual-display">
+                    <video autoplay muted loop poster="12.png">
+                        <source src="15.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="info-display">
+                    <div>
+                        <h2 style="color:#fff;">TENGEN</h2>
+                        <p style="color:var(--accent);">FLAGSHIP GAME TITLE. MOMENTUM-BASED MOVEMENT. LEVEL 01 ARCHITECTURE IN-PROGRESS.</p>
+                        <img src="101.png" style="width:100%; margin-top:20px; border:1px solid var(--accent);">
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="panel">
-            <div class="manga-card" style="background:#000; color:#fff; border-color:#fff;">
-                <div class="visual-box" style="border-color:#fff;">
-                    <video autoplay muted loop poster="12.png"><source src="15.mp4" type="video/mp4"></video>
-                </div>
-                <div style="padding-left:20px;">
-                    <h2 style="color:var(--accent);">TENGEN</h2>
-                    <p>Flagship studio project. Momentum-based movement. Level 01 urban geometry architecture.</p>
-                    <img src="101.png" style="width:100%; margin-top:20px; border:2px solid #fff;">
-                </div>
-            </div>
-        </section>
-
-        <section class="panel">
-            <div class="manga-card">
-                <div class="visual-box"><img src="2.png"></div>
-                <div>
-                    <h2>HELP ME</h2>
-                    <p>Hand-painted narrative prop. Texture-driven storytelling study.</p>
-                    <img src="3.png" style="width:100%; margin-top:20px; opacity:0.3;">
+        <section class="totem-panel">
+            <div class="cyber-card">
+                <div class="visual-display"><img src="69.png"></div>
+                <div class="info-display">
+                    <div>
+                        <h2>MECHANICS</h2>
+                        <p>BIPEDAL HYDRAULIC SYSTEMS. HIGH-PRECISION HARD SURFACE JOINTS.</p>
+                        <div style="display:flex; gap:10px; margin-top:20px;">
+                            <img src="64.png" style="width:45%; border:1px solid #444;">
+                            <img src="65.png" style="width:45%; border:1px solid #444;">
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section class="panel">
-            <div class="manga-card">
-                <div class="visual-box"><img src="9.png"></div>
-                <div>
-                    <h2>TOWER</h2>
-                    <p>Sci-Fi architecture. Optimized for mid-range GPU performance.</p>
+        <section class="totem-panel">
+            <div class="cyber-card">
+                <div class="visual-display"><img src="2.png"></div>
+                <div class="info-display">
+                    <div>
+                        <h2>PROPS</h2>
+                        <p>HAND-PAINTED ASSETS. NARRATIVE STORYTELLING THROUGH TEXTURES. "HELP ME" SERIES.</p>
+                        <img src="3.png" style="width:80%; opacity:0.3; margin-top:20px;">
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section class="panel">
+        <section class="totem-panel">
+            <div class="cyber-card">
+                <div class="visual-display"><img src="9.png"></div>
+                <div class="info-display">
+                    <div>
+                        <h2>TOWER</h2>
+                        <p>ENVIRONMENTAL ARCHITECTURE. SCI-FI STRUCTURES BUILT FOR INDIE SCALES.</p>
+                        <img src="45.png" style="width:50%; margin-top:20px; filter:invert(1);">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="totem-panel">
             <div style="text-align:center;">
-                <h1 style="font-size:10rem; line-height:0.8;">LET'S<br>WORK</h1>
-                <p style="font-weight:900; color:var(--accent); font-size:1.5rem; margin-top:20px;">throneleafgames@gmail.com</p>
-                <div style="margin-top:40px; display:flex; gap:20px; justify-content:center;">
-                    <span style="border:5px solid #000; padding:15px 30px; font-weight:900;">LinkedIn</span>
-                    <span style="border:5px solid #000; padding:15px 30px; font-weight:900;">Instagram</span>
-                </div>
-                <p style="margin-top:60px; font-weight:900; letter-spacing:10px; opacity:0.1;">RESTARTING CYCLE...</p>
+                <h2 style="font-family:'Anton'; font-size:12vw; color:transparent; -webkit-text-stroke:2px #fff;">CONNECT</h2>
+                <a href="mailto:throneleafgames@gmail.com" style="color:var(--accent); font-size:2rem; text-decoration:none; font-weight:900;">THRONELEAFGAMES@GMAIL.COM</a>
+                <p style="margin-top:60px; font-weight:300; letter-spacing:10px; color:#444;">RE-INITIALIZING_SEQUENCE</p>
             </div>
         </section>
 
@@ -182,41 +234,42 @@
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        function startLoop() {
-            document.getElementById('gate').style.display = 'none';
+        function engageLoop() {
+            document.getElementById('init-gate').style.display = 'none';
             document.getElementById('bgm').currentTime = 9;
             document.getElementById('bgm').play();
 
-            const panels = gsap.utils.toArray(".panel");
+            const panels = gsap.utils.toArray(".totem-panel");
             
-            // MAIN HORIZONTAL SCROLL
+            // MAIN RAIL MOTION
             let scrollTween = gsap.to(panels, {
                 xPercent: -100 * (panels.length - 1),
                 ease: "none",
                 scrollTrigger: {
-                    trigger: ".scroller-wrapper",
+                    trigger: "#rail",
                     pin: true,
                     scrub: 1,
-                    end: () => "+=" + document.getElementById('master').offsetWidth,
+                    end: () => "+=" + document.getElementById('rail').offsetWidth,
                     onUpdate: (self) => {
-                        // PROGRESS LINE SYNC (Behind content)
-                        gsap.to("#fill", { width: (self.progress * 100) + "%", duration: 0.1 });
+                        // PROGRESS SYNC
+                        gsap.to("#progressFill", { width: (self.progress * 100) + "%", duration: 0.1 });
                         
-                        // INFINITE LOOP JUMP
-                        if (self.progress > 0.99) self.scroll(10);
+                        // INFINITE JUMP
+                        if (self.progress > 0.995) self.scroll(10);
                     }
                 }
             });
 
-            // HERO Z-AXIS FLY
-            gsap.to("#flyText", {
-                z: -5000,
+            // HERO Z-AXIS EXPLOSION
+            gsap.to("#flyTitle", {
+                scale: 5,
                 opacity: 0,
+                filter: "blur(20px)",
                 scrollTrigger: {
-                    trigger: ".scroller-wrapper",
+                    trigger: "#rail",
                     start: "top top",
                     scrub: true,
-                    end: "15% top"
+                    end: "10% top"
                 }
             });
         }
