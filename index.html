@@ -3,189 +3,306 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chetan Joshi | Founder @ ThroneLeaf Games</title>
+    <title>Chetan Joshi | 3D Artist & Game Dev</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300;900&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.3/dist/locomotive-scroll.min.css">
+    
     <style>
-        :root { --accent: #458a7d; --bg: #000; --panel: #0a0a0a; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            background: var(--bg); color: #fff; 
-            font-family: 'Space Grotesk', sans-serif; 
-            overflow-x: hidden; overscroll-behavior: none;
+        /* ================= RESET & CORE ================= */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Courier New', monospace; }
+        body { background-color: #f0f0f0; color: #111; overflow-x: hidden; }
+        ::-webkit-scrollbar { display: none; } /* Hide default scrollbar for raw manga feel */
+
+        /* ================= FLOATING CHARACTER GUIDE ================= */
+        #character-guide {
+            position: fixed; bottom: 30px; left: 30px; z-index: 9999;
+            display: flex; flex-direction: column; align-items: center;
+            animation: bounce 3s ease-in-out infinite;
+        }
+        #character-guide img { width: 140px; filter: drop-shadow(5px 5px 0px #000); }
+        .speech-bubble {
+            background: #fff; border: 4px solid #000; border-radius: 20px;
+            padding: 12px 18px; margin-bottom: 15px; font-weight: 900;
+            text-align: center; box-shadow: 6px 6px 0px #000; font-size: 1.1rem;
+            max-width: 250px; text-transform: uppercase;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
 
-        /* --- THE MASTER RAIL --- */
-        .master-rail {
-            display: flex; width: 800vw; height: 100vh; flex-wrap: nowrap;
+        /* ================= MANGA PANELS & LAYOUT ================= */
+        #main-container { width: 100vw; }
+        .manga-panel {
+            border: 8px solid #000; background: #fff;
+            box-shadow: 15px 15px 0px #000; margin: 40px; padding: 30px;
+            position: relative; overflow: hidden;
+        }
+        .panel-title {
+            font-size: 3rem; font-weight: 900; text-transform: uppercase;
+            background: #000; color: #fff; display: inline-block;
+            padding: 10px 20px; margin-bottom: 20px;
         }
 
-        .panel {
-            width: 100vw; height: 100vh; flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center;
-            position: relative; border-right: 1px solid rgba(255,255,255,0.1);
-            background: radial-gradient(circle at center, #111 0%, #000 100%);
+        /* ================= HERO SECTION ================= */
+        .hero-section {
+            height: 100vh; width: 100vw; display: flex;
+            flex-direction: column; justify-content: center; align-items: center;
+            position: relative; border-bottom: 12px solid #000;
+        }
+        .z-axis-title {
+            font-size: 8vw; font-weight: 900; text-transform: uppercase;
+            color: #111; text-shadow: 8px 8px 0px #aaa;
+            text-align: center; line-height: 1;
+        }
+        .hero-subtitle {
+            font-size: 2vw; font-weight: bold; margin-top: 20px;
+            background: #111; color: #fff; padding: 10px 30px;
         }
 
-        /* --- HERO SECTION RE-DESIGN --- */
-        .hero-container {
-            position: relative; width: 90%; height: 80%;
-            display: flex; align-items: center; justify-content: space-between;
+        /* ================= HORIZONTAL SCROLL TIMELINE ================= */
+        .horizontal-wrapper {
+            display: flex; width: 700vw; /* 7 Sections = 700vw */
+            height: 100vh; align-items: center;
+            background: repeating-linear-gradient(45deg, #f0f0f0, #f0f0f0 20px, #e0e0e0 20px, #e0e0e0 40px);
         }
-        .hero-img-box {
-            width: 45%; height: 100%; position: relative;
-            border: 2px solid #222; overflow: hidden;
+        .horizontal-section {
+            width: 100vw; height: 90vh; display: flex;
+            justify-content: center; align-items: center;
         }
-        .hero-img-box img { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.1); }
+
+        /* ================= GRIDS FOR 34 ASSETS ================= */
+        .manga-grid { display: grid; gap: 15px; }
+        .manga-grid img, .manga-grid video {
+            width: 100%; height: 100%; object-fit: cover;
+            border: 4px solid #000; filter: grayscale(20%);
+            transition: filter 0.3s;
+        }
+        .manga-grid img:hover, .manga-grid video:hover { filter: grayscale(0%); }
         
-        .hero-details { width: 50%; padding: 20px; }
-        .hero-details h1 { font-family: 'Anton'; font-size: 10vw; line-height: 0.8; margin-bottom: 20px; color: #fff; }
-        .hero-details .sub-text { font-size: 1.2rem; font-weight: 300; letter-spacing: 5px; color: var(--accent); margin-bottom: 40px; }
-        .bio-tags { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; border-top: 1px solid #333; padding-top: 30px; }
-        .bio-tags span { font-size: 0.7rem; font-weight: 900; text-transform: uppercase; color: #555; }
-        .bio-tags b { display: block; color: #fff; font-size: 1rem; margin-top: 5px; }
-
-        /* --- MANGA CARDS (Fixed Alignment) --- */
-        .cyber-card {
-            width: 90vw; height: 85vh; background: var(--panel);
-            border: 1px solid #333; display: grid; grid-template-columns: 1.2fr 0.8fr;
-            gap: 30px; padding: 40px; box-shadow: 0 50px 100px rgba(0,0,0,0.5);
-        }
-        .visual-frame { border: 1px solid #444; background: #000; overflow: hidden; position: relative; }
-        .visual-frame img, .visual-frame video { width: 100%; height: 100%; object-fit: cover; }
+        /* Specific Grid Layouts based on your file count */
+        .grid-tengen { grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 1fr 1fr; }
+        .grid-tengen .main-vid { grid-column: 1 / 2; grid-row: 1 / 3; }
         
-        .info-frame h2 { font-family: 'Anton'; font-size: 5rem; color: var(--accent); }
-        .info-frame p { color: #888; font-size: 1.1rem; line-height: 1.6; margin: 20px 0; }
+        .grid-qship { grid-template-columns: repeat(4, 1fr); grid-template-rows: auto auto; }
+        .grid-qship .beauty { grid-column: 1 / 3; grid-row: 1 / 3; }
 
-        /* --- PROGRESS BAR --- */
-        .rail-line { position: fixed; bottom: 40px; left: 5%; width: 90%; height: 2px; background: #222; z-index: 100; }
-        .rail-fill { position: absolute; top: 0; left: 0; height: 100%; background: var(--accent); width: 0%; transition: 0.1s; }
-
-        /* --- GATE --- */
-        #init-gate { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        .init-btn { padding: 20px 60px; border: 1px solid #fff; background: none; color: #fff; font-family: 'Anton'; font-size: 2rem; cursor: pointer; }
+        .grid-mechanics { grid-template-columns: 1fr 1fr; }
+        
+        /* ================= FINAL LOOP SECTION ================= */
+        .loop-trigger-btn {
+            font-size: 2rem; font-weight: 900; padding: 20px 40px;
+            background: #ff3366; color: #fff; border: 8px solid #000;
+            box-shadow: 10px 10px 0px #000; cursor: pointer;
+            text-transform: uppercase; transition: all 0.2s;
+        }
+        .loop-trigger-btn:hover { transform: translate(-5px, -5px); box-shadow: 15px 15px 0px #000; }
     </style>
 </head>
 <body>
 
-    <div id="init-gate"><button class="init-btn" onclick="startLoop()">BOOT PORTAL</button></div>
-    <audio id="bgm" loop src="S.mp3"></audio>
+    <audio id="bg-music" loop>
+        <source src="S.mp3" type="audio/mpeg">
+    </audio>
 
-    <div class="rail-line"><div class="rail-fill" id="fill"></div></div>
-
-    <div class="master-rail" id="rail">
-        
-        <section class="panel">
-            <div class="hero-container">
-                <div class="hero-img-box">
-                    <img src="CJ.png" alt="Chetan Joshi">
-                </div>
-                <div class="hero-details">
-                    <div class="sub-text">EST. MARCH 11, 2008</div>
-                    <h1>CHETAN<br>JOSHI</h1>
-                    <div class="bio-tags">
-                        <span>Role<b>LEAD DEVELOPER</b></span>
-                        <span>Entity<b>FOUNDER, THRONELEAF GAMES</b></span>
-                        <span>Expertise<b>3D ARTIST & CSE</b></span>
-                        <span>Status<b>INFINITE LOOP ACTIVE</b></span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="panel">
-            <div class="cyber-card">
-                <div class="visual-frame">
-                    <img src="5.jpg">
-                    <div style="position:absolute; bottom:20px; left:20px; display:flex; gap:10px;">
-                        <img src="54.png" style="width:120px; border:1px solid #fff;">
-                        <img src="61.png" style="width:120px; border:1px solid #fff;">
-                    </div>
-                </div>
-                <div class="info-frame">
-                    <h2>Q-SHIP</h2>
-                    <p>HARD SURFACE SPACESHIP. PBR TEXTURING. OPTIMIZED FOR RTX 2050 PERFORMANCE. BUILT IN BLENDER 4.0.</p>
-                    <button style="background:var(--accent); color:#000; border:none; padding:15px; font-weight:900; width:100%; cursor:pointer;">VIEW ON GDM</button>
-                </div>
-            </div>
-        </section>
-
-        <section class="panel">
-            <div class="cyber-card" style="border-color:var(--accent);">
-                <div class="visual-frame">
-                    <video autoplay muted loop poster="12.png"><source src="15.mp4" type="video/mp4"></video>
-                </div>
-                <div class="info-frame">
-                    <h2 style="color:#fff;">TENGEN</h2>
-                    <p style="color:var(--accent);">FLAGSHIP GAME PROJECT. FOCUSING ON DYNAMIC MOMENTUM SYSTEMS AND STYLIZED URBAN ENVIRONMENTS.</p>
-                    <img src="101.png" style="width:100%; border:1px solid var(--accent);">
-                </div>
-            </div>
-        </section>
-
-        <section class="panel">
-            <div class="cyber-card">
-                <div class="visual-frame"><img src="69.png"></div>
-                <div class="info-frame">
-                    <h2>MECHANICS</h2>
-                    <p>BIPEDAL ROBOTIC SYSTEMS. HIGH-DETAIL HYDRAULIC JOINTS AND HARD SURFACE PIPELINE.</p>
-                    <div style="display:flex; gap:10px;">
-                        <img src="64.png" style="width:48%; border:1px solid #333;">
-                        <img src="65.png" style="width:48%; border:1px solid #333;">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="panel">
-            <div style="text-align:center;">
-                <h1 style="font-family:'Anton'; font-size:12vw; -webkit-text-stroke:1px #fff; color:transparent;">REVERSE</h1>
-                <p style="letter-spacing:10px; color:var(--accent); font-weight:900; margin-top:20px;">throneleafgames@gmail.com</p>
-                <div style="margin-top:50px; font-size:0.7rem; color:#444;">SYSTEM WILL NOW AUTO-REVERSE SCROLL</div>
-            </div>
-        </section>
-
+    <div id="character-guide">
+        <div class="speech-bubble" id="dialogue-box">System Initialized. Scroll to dive in!</div>
+        <img src="CJ.png" alt="Chetan Guide">
     </div>
+
+    <div id="main-container" data-scroll-container>
+        
+        <section class="hero-section" data-scroll-section>
+            <h1 class="z-axis-title">CHETAN JOSHI</h1>
+            <div class="hero-subtitle">ThroneLeaf Games | 3D Artist | Game Dev</div>
+        </section>
+
+        <div class="horizontal-wrapper" data-scroll-section>
+            
+            <section class="horizontal-section" id="sec-tengen">
+                <div class="manga-panel">
+                    <div class="panel-title">TenGen Parkour</div>
+                    <div class="manga-grid grid-tengen">
+                        <video src="15.mp4" poster="12.png" autoplay loop muted class="main-vid"></video>
+                        <img src="100.png" alt="Alpha Snap 1">
+                        <img src="101.png" alt="Alpha Snap 2">
+                        <img src="13.png" alt="Env Detail">
+                        <img src="14.png" alt="Engine View">
+                    </div>
+                </div>
+            </section>
+
+            <section class="horizontal-section" id="sec-qship">
+                <div class="manga-panel">
+                    <div class="panel-title">Q-Ship Concept</div>
+                    <div class="manga-grid grid-qship">
+                        <img src="5.jpg" alt="Beauty Render" class="beauty">
+                        <img src="6.jpg" alt="Wireframe">
+                        <img src="54.png" alt="Nodes">
+                        <img src="56.png" alt="UV">
+                        <img src="61.png" alt="Paint">
+                        <img src="4.jpg" alt="Alt Angle">
+                        <img src="7.png" alt="Base Mesh">
+                    </div>
+                </div>
+            </section>
+
+            <section class="horizontal-section" id="sec-mech">
+                <div class="manga-panel">
+                    <div class="panel-title">Bipedal Mechanics</div>
+                    <div class="manga-grid grid-mechanics">
+                        <img src="69.png" alt="Ortho View">
+                        <img src="64.png" alt="Hydraulics">
+                        <img src="65.png" alt="Pistons">
+                        <img src="66.png" alt="Base">
+                    </div>
+                </div>
+            </section>
+
+            <section class="horizontal-section" id="sec-crate">
+                <div class="manga-panel">
+                    <div class="panel-title">Stylized Crate</div>
+                    <div class="manga-grid grid-mechanics">
+                        <img src="2.png" alt="Crate Render">
+                        <img src="3.png" alt="Art Direction">
+                    </div>
+                </div>
+            </section>
+
+            <section class="horizontal-section" id="sec-tech">
+                <div class="manga-panel">
+                    <div class="panel-title">Architecture & Tech</div>
+                    <div class="manga-grid grid-tengen">
+                        <img src="9.png" alt="Sci-Fi Tower" class="main-vid">
+                        <img src="8.png" alt="Atmosphere">
+                        <img src="45.png" alt="Arduino">
+                    </div>
+                </div>
+            </section>
+
+            <section class="horizontal-section" id="sec-rnf">
+                <div class="manga-panel">
+                    <div class="panel-title">Run & Fight 2D</div>
+                    <div class="manga-grid grid-qship">
+                        <img src="43.png" alt="Gameplay" class="beauty">
+                        <img src="40.png" alt="Logic Blocks">
+                        <img src="41.png" alt="UI Settings">
+                        <img src="42.png" alt="Sprites">
+                        <img src="44.png" alt="Level Layout">
+                    </div>
+                </div>
+            </section>
+
+            <section class="horizontal-section">
+                <div class="manga-panel" style="text-align: center;">
+                    <h2 style="font-size: 3rem; margin-bottom: 20px;">SYSTEM OVERLOAD</h2>
+                    <button class="loop-trigger-btn" id="loop-btn">Re-Enter The Loop</button>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.3/dist/locomotive-scroll.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        function startLoop() {
-            document.getElementById('init-gate').style.display = 'none';
-            document.getElementById('bgm').currentTime = 9;
-            document.getElementById('bgm').play();
+        // 1. INIT LOCOMOTIVE SCROLL
+        const locoScroll = new LocomotiveScroll({
+            el: document.querySelector("#main-container"),
+            smooth: true,
+            multiplier: 1.2,
+            class: 'is-revealed'
+        });
 
-            const panels = gsap.utils.toArray(".panel");
+        // 2. SYNC LOCOMOTIVE WITH GSAP
+        locoScroll.on("scroll", ScrollTrigger.update);
+        ScrollTrigger.scrollerProxy("#main-container", {
+            scrollTop(value) {
+                return arguments.length ? locoScroll.scrollTo(value, 0, 0) : locoScroll.scroll.instance.scroll.y;
+            },
+            getBoundingClientRect() {
+                return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight };
+            },
+            pinType: document.querySelector("#main-container").style.transform ? "transform" : "fixed"
+        });
+
+        // 3. HORIZONTAL SCROLL LOGIC
+        const horizontalSections = gsap.utils.toArray(".horizontal-wrapper");
+        
+        gsap.to(horizontalSections, {
+            xPercent: -100 * (7 - 1), // 7 sections total
+            ease: "none",
+            scrollTrigger: {
+                trigger: ".horizontal-wrapper",
+                scroller: "#main-container",
+                pin: true,
+                scrub: 1,
+                end: () => "+=" + document.querySelector(".horizontal-wrapper").offsetWidth
+            }
+        });
+
+        // 4. HERO Z-AXIS ANIMATION
+        gsap.to(".z-axis-title", {
+            scale: 5,
+            opacity: 0,
+            scrollTrigger: {
+                trigger: ".hero-section",
+                scroller: "#main-container",
+                start: "top top",
+                end: "bottom top",
+                scrub: true
+            }
+        });
+
+        // 5. DYNAMIC CHARACTER DIALOGUE LOGIC
+        const dialogues = [
+            { trigger: "#sec-tengen", text: "TenGen Parkour! Pure Unity mechanics." },
+            { trigger: "#sec-qship", text: "Q-Ship: 100% modeled in Blender." },
+            { trigger: "#sec-mech", text: "Check out those hydraulics!" },
+            { trigger: "#sec-rnf", text: "Run & Fight: 2D Logic in action." }
+        ];
+
+        dialogues.forEach(panel => {
+            ScrollTrigger.create({
+                trigger: panel.trigger,
+                scroller: "#main-container",
+                containerAnimation: gsap.getById("horizontal-scroll"), // Link to horizontal scroll
+                start: "left center",
+                onEnter: () => document.getElementById("dialogue-box").innerText = panel.text,
+                onEnterBack: () => document.getElementById("dialogue-box").innerText = panel.text
+            });
+        });
+
+        // 6. CONFETTI & LOOP BACK
+        document.getElementById('loop-btn').addEventListener('click', () => {
+            confetti({
+                particleCount: 200,
+                spread: 160,
+                origin: { y: 0.6 },
+                colors: ['#000000', '#ffffff', '#ff3366']
+            });
             
-            // THE PING-PONG INFINITE SCROLL
-            gsap.to(panels, {
-                xPercent: -100 * (panels.length - 1),
-                ease: "none",
-                scrollTrigger: {
-                    trigger: "#rail",
-                    pin: true,
-                    scrub: 1,
-                    end: () => "+=" + document.getElementById('rail').offsetWidth,
-                    onUpdate: (self) => {
-                        gsap.to("#fill", { width: (self.progress * 100) + "%" });
-                        
-                        // REVERSE JUMP LOGIC (PING-PONG)
-                        if (self.progress > 0.99) {
-                            // Instant jump for true loop or keep it for reverse feel
-                            window.scrollTo({ top: 10, behavior: 'smooth' });
-                        }
-                    }
-                }
-            });
+            // Wait for confetti, then blast back to top
+            setTimeout(() => {
+                locoScroll.scrollTo(0, { duration: 2000, disableLerp: false });
+                document.getElementById("dialogue-box").innerText = "Back to square one!";
+            }, 1000);
+        });
 
-            // HERO TEXT ANIMATION
-            gsap.from(".hero-details h1", {
-                x: 100, opacity: 0, duration: 1.5, ease: "expo.out", delay: 0.5
-            });
-        }
+        // Play Audio on first click anywhere (Browser policy bypass)
+        document.body.addEventListener('click', () => {
+            const bgAudio = document.getElementById('bg-music');
+            if (bgAudio.paused) bgAudio.play();
+        }, { once: true });
+
+        // Refresh triggers
+        ScrollTrigger.addEventListener("refresh", () => locoScroll.update());
+        ScrollTrigger.refresh();
     </script>
 </body>
 </html>
