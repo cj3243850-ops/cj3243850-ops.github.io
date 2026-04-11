@@ -1,364 +1,354 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chetan Joshi — Lead Dev & 3D Artist | ThroneLeaf Games</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --bg: #050508;
-            --bg-accent: #0a0a0f;
-            --neon-green: #00ff88;
-            --neon-pink: #ff0066;
-            --neon-blue: #00cfff;
-            --text-main: #e0e6ed;
-            --text-dim: #94a3b8;
-            --glass: rgba(15, 23, 42, 0.8);
-            --border: rgba(255, 255, 255, 0.1);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chetan Joshi — Lead Dev & 3D Artist | ThroneLeaf Games</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #05070a;
+    --bg2: #0a0d14;
+    --neon-green: #00ff88;
+    --neon-pink: #ff0066;
+    --neon-blue: #00cfff;
+    --dim: #161b22;
+    --text: #c8d6e5;
+    --muted: #5a6a7e;
+    --card: rgba(15, 20, 28, 0.8);
+    --border: rgba(255, 255, 255, 0.1);
+    --max: 1100px;
+  }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background-color: var(--bg);
-            color: var(--text-main);
-            font-family: 'Rajdhani', sans-serif;
-            overflow-x: hidden;
-            line-height: 1.6;
-            cursor: none; /* Custom cursor functionality */
-        }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+    line-height: 1.6;
+  }
 
-        /* --- PRELOADER --- */
-        #preloader {
-            position: fixed; inset: 0; background: var(--bg);
-            z-index: 10000; display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .loader-bar {
-            width: 200px; height: 2px; background: rgba(0,255,136,0.1);
-            position: relative; overflow: hidden; margin-top: 20px;
-        }
-        .loader-progress {
-            position: absolute; width: 100%; height: 100%;
-            background: var(--neon-green); left: -100%;
-            animation: load 1.5s infinite;
-        }
-        @keyframes load { 0% { left: -100%; } 50% { left: 0; } 100% { left: 100%; } }
+  /* CURSOR */
+  #cursor { width: 10px; height: 10px; background: var(--neon-green); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; box-shadow: 0 0 15px var(--neon-green); }
+  #cursor-ring { width: 40px; height: 40px; border: 1.5px solid rgba(0,255,136,0.3); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; will-change: transform; transition: transform 0.15s ease-out; }
 
-        /* --- CUSTOM CURSOR --- */
-        #cursor {
-            width: 8px; height: 8px; background: var(--neon-green);
-            border-radius: 50%; position: fixed; pointer-events: none;
-            z-index: 9999; box-shadow: 0 0 15px var(--neon-green);
-        }
-        #cursor-follower {
-            width: 35px; height: 35px; border: 1px solid var(--neon-green);
-            border-radius: 50%; position: fixed; pointer-events: none;
-            z-index: 9998; transition: transform 0.15s ease-out;
-            opacity: 0.5;
-        }
+  /* NAVIGATION */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+    padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center;
+    background: rgba(5, 7, 10, 0.85); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Orbitron', monospace; font-weight: 900;
+    color: #fff; letter-spacing: 2px; text-decoration: none; font-size: 1.2rem;
+  }
+  .nav-logo span { color: var(--neon-green); }
+  .nav-links { display: flex; gap: 3rem; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: var(--muted);
+    font-family: 'Share Tech Mono', monospace; font-size: 0.85rem;
+    transition: 0.3s; text-transform: uppercase;
+  }
+  .nav-links a:hover { color: var(--neon-green); }
 
-        /* --- BACKGROUND GRADIENTS & NOISE --- */
-        .noise {
-            position: fixed; inset: 0; z-index: 1; opacity: 0.03; pointer-events: none;
-            background-image: url('data:image/svg+xml,...'); /* SVG Noise */
-        }
+  /* OVERLAYS */
+  .noise-overlay { position: fixed; inset: 0; pointer-events: none; z-index: 999; opacity: 0.03; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"); }
 
-        /* --- NAVIGATION --- */
-        nav {
-            position: fixed; top: 0; width: 100%; z-index: 1000;
-            padding: 1.5rem 4rem; display: flex; justify-content: space-between;
-            align-items: center; background: rgba(5, 5, 8, 0.85);
-            backdrop-filter: blur(15px); border-bottom: 1px solid var(--border);
-        }
-        .logo-box { font-family: 'Orbitron'; font-weight: 900; letter-spacing: 3px; }
-        .logo-box span { color: var(--neon-green); text-shadow: 0 0 10px var(--neon-green); }
-        .nav-links { display: flex; gap: 3rem; list-style: none; }
-        .nav-links a {
-            text-decoration: none; color: var(--text-dim);
-            font-family: 'Share Tech Mono'; font-size: 0.85rem;
-            transition: 0.3s; text-transform: uppercase;
-        }
-        .nav-links a:hover { color: var(--neon-green); }
+  /* SECTION LABELS & HEADERS */
+  .section-label { font-family: 'Share Tech Mono', monospace; color: var(--neon-pink); font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  h2 { font-family: 'Orbitron', monospace; font-weight: 700; font-size: 2.6rem; color: #fff; margin-bottom: 0.8rem; }
+  .divider { width: 60px; height: 2px; margin: 0 auto 3rem; background: linear-gradient(90deg, transparent, var(--neon-green), transparent); box-shadow: 0 0 10px var(--neon-green); }
 
-        /* --- HERO SECTION (CJ.png as Background) --- */
-        #hero {
-            height: 100vh; position: relative; display: flex;
-            align-items: center; justify-content: flex-start;
-            padding-left: 10%; overflow: hidden;
-        }
-        .hero-bg-img {
-            position: absolute; right: -5%; top: 50%; transform: translateY(-50%);
-            height: 110%; width: auto; z-index: -1;
-            filter: drop-shadow(-20px 0 50px rgba(255, 0, 102, 0.2)) saturate(1.2);
-            mask-image: linear-gradient(to left, black 60%, transparent 100%);
-            opacity: 0.9;
-        }
-        .hero-video-bg {
-            position: absolute; inset: 0; width: 100%; height: 100%;
-            object-fit: cover; opacity: 0.15; z-index: -2;
-        }
-        .hero-content { max-width: 800px; z-index: 10; }
-        .hero-tag { font-family: 'Share Tech Mono'; color: var(--neon-pink); font-size: 1.1rem; margin-bottom: 1rem; }
-        h1 {
-            font-family: 'Orbitron'; font-size: clamp(3rem, 8vw, 6rem);
-            line-height: 0.9; color: #fff; margin-bottom: 2rem;
-        }
-        .grad-text { background: linear-gradient(90deg, #fff, var(--neon-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        /* --- BUTTONS --- */
-        .btn {
-            padding: 1rem 2.5rem; font-family: 'Orbitron'; font-size: 0.8rem;
-            text-decoration: none; border: 1px solid var(--neon-green);
-            color: var(--neon-green); position: relative; overflow: hidden;
-            background: transparent; transition: 0.4s; display: inline-block;
-        }
-        .btn:hover { background: var(--neon-green); color: #000; box-shadow: 0 0 30px var(--neon-green); }
+  /* HERO */
+  #hero {
+    height: 100vh; display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden; padding: 0 2rem;
+  }
+  /* Main BG Image - Increased Transparency on the Right */
+  .hero-bg-img {
+    position: absolute; right: -5%; top: 50%; transform: translateY(-50%);
+    height: 110%; width: auto; z-index: -1;
+    filter: drop-shadow(-20px 0 50px rgba(255, 0, 102, 0.2)) saturate(1.2);
+    /* Lower opacity start, with a longer transparent area on the right */
+    mask-image: linear-gradient(to left, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.1) 15%, black 60%);
+    opacity: 0.85; /* Slightly lowered overall image opacity for background video visibility */
+    transition: opacity 1s ease;
+  }
+  /* Background Video (Silent Ambient) */
+  .hero-video-bg {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; opacity: 0.2; z-index: -2;
+  }
+  .hero-content { text-align: center; z-index: 10; max-width: 800px; }
+  .hero-tag { font-family: 'Share Tech Mono'; color: var(--neon-pink); font-size: 0.8rem; margin-bottom: 1.2rem; }
+  h1 { font-family: 'Orbitron'; font-weight: 900; font-size: clamp(3rem, 8vw, 6rem); color: #fff; line-height: 0.9; margin-bottom: 2rem; }
+  .grad-text { background: linear-gradient(90deg, #fff, var(--neon-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 15px rgba(0,207,255,0.4)); }
+  .hero-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 3rem; }
+  .hero-badge { font-family: 'Share Tech Mono'; font-size: 0.65rem; color: var(--neon-blue); border: 1px solid rgba(0,207,255,0.3); background: rgba(0,207,255,0.05); padding: 0.28rem 0.75rem; }
+  .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
 
-        /* --- PORTFOLIO SECTIONS --- */
-        section { padding: 100px 10%; position: relative; z-index: 5; }
-        .section-header { margin-bottom: 60px; }
-        .section-header h2 { font-family: 'Orbitron'; font-size: 2.5rem; color: #fff; }
-        .section-header div { width: 50px; height: 3px; background: var(--neon-pink); margin-top: 10px; }
+  /* BUTTONS */
+  .btn {
+    font-family: 'Orbitron', monospace; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; text-decoration: none; padding: 1rem 2.5rem; border: 1px solid var(--border);
+    transition: all 0.3s ease; position: relative; overflow: hidden; display: inline-block; cursor: none;
+  }
+  .btn:hover { background: rgba(255,255,255,0.1); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
+  .btn-green { color: var(--neon-green); border-color: var(--neon-green); box-shadow: 0 0 18px rgba(0,255,136,0.2); }
+  .btn-green:hover { background: var(--neon-green); color: #000; box-shadow: 0 0 35px rgba(0,255,136,0.6); }
 
-        /* --- ASSET GRID LOGIC --- */
-        .grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
-        }
-        .card {
-            background: var(--bg-accent); border: 1px solid var(--border);
-            border-radius: 4px; overflow: hidden; transition: 0.5s;
-        }
-        .card:hover { transform: translateY(-10px); border-color: var(--neon-green); }
-        .card-media { width: 100%; height: 240px; overflow: hidden; position: relative; }
-        .card-media img, .card-media video { 
-            width: 100%; height: 100%; object-fit: cover; 
-            transition: 0.8s cubic-bezier(0.2, 1, 0.3, 1);
-        }
-        .card:hover .card-media img { transform: scale(1.1); }
-        .card-body { padding: 25px; }
-        .card-category { font-family: 'Share Tech Mono'; color: var(--neon-blue); font-size: 0.75rem; }
-        .card-title { font-family: 'Orbitron'; font-size: 1.1rem; margin: 10px 0; color: #fff; }
+  /* PORTFOLIO GRIDS */
+  .inner { width: 100%; max-width: var(--max); margin: 0 auto; text-align: center; }
+  section { padding: 100px 2rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin: 0 auto; text-align: left; }
+  .card { background: var(--card); border: 1px solid var(--dim); border-radius: 4px; overflow: hidden; transition: 0.5s ease; position: relative; }
+  .card:hover { transform: translateY(-10px); border-color: rgba(0,255,136,0.25); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+  .card-media { width: 100%; height: 240px; overflow: hidden; position: relative; }
+  .card-media img, .card-media video { width: 100%; height: 100%; object-fit: cover; transition: 0.8s cubic-bezier(0.2, 1, 0.3, 1); }
+  .card:hover .card-media img { transform: scale(1.1); }
+  .card-body { padding: 25px; }
+  .card-category { font-family: 'Share Tech Mono'; color: var(--neon-blue); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+  .card-title { font-family: 'Orbitron'; font-weight: 700; font-size: 1.1rem; margin: 10px 0; color: #fff; }
 
-        /* --- STATS SECTION --- */
-        .stats-bar {
-            display: flex; justify-content: space-around; background: var(--glass);
-            padding: 50px; border: 1px solid var(--border); margin: 50px 0;
-        }
-        .stat-item h3 { font-family: 'Orbitron'; font-size: 2.5rem; color: var(--neon-green); }
-        .stat-item p { font-family: 'Share Tech Mono'; color: var(--text-dim); font-size: 0.9rem; }
+  /* ABOUT */
+  #about { background: var(--bg2); }
+  .about-bio { max-width: 680px; margin: 0 auto 2.5rem; font-size: 1.1rem; font-weight: 300; line-height: 1.8; color: var(--text-dim); }
+  .about-bio strong { color: var(--neon-green); font-weight: 600; }
+  .about-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2.5rem; }
+  .stat-card { background: var(--card); border: 1px solid var(--dim); padding: 1.5rem; border-left: 3px solid var(--neon-green); transition: 0.3s ease; }
+  .stat-card:hover { transform: translateY(-4px); }
+  .stat-num { font-family: 'Orbitron', monospace; font-size: 2.5rem; font-weight: 900; color: var(--neon-green); margin-bottom: 0.3rem; }
+  .stat-label { font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; color: var(--muted); text-transform: uppercase; }
 
-        /* --- FOOTER --- */
-        footer {
-            background: #020205; padding: 60px 10%; border-top: 1px solid var(--border);
-            text-align: center;
-        }
-        .footer-logo { font-family: 'Orbitron'; font-size: 1.5rem; color: #fff; margin-bottom: 20px; }
+  /* MUSIC PLAYER */
+  .music-ctrl {
+    position: fixed; bottom: 30px; left: 30px; z-index: 1001;
+    background: var(--card); padding: 10px; border-radius: 50px;
+    border: 1px solid var(--neon-pink); display: flex; align-items: center; gap: 10px;
+  }
+  .play-pause { background: none; border: none; color: var(--neon-pink); cursor: none; font-size: 1rem; opacity: 0.8; transition: 0.2s; }
+  .play-pause:hover { opacity: 1; text-shadow: 0 0 10px var(--neon-pink); }
+  
+  /* FOOTER */
+  footer { background: #020205; padding: 60px 2rem; border-top: 1px solid var(--dim); text-align: center; font-family: 'Share Tech Mono'; font-size: 0.7rem; color: var(--muted); }
+  .footer-logo { font-family: 'Orbitron'; font-size: 1.3rem; font-weight: 900; color: #fff; margin-bottom: 15px; letter-spacing: 1px; }
 
-        /* --- AUDIO PLAYER --- */
-        .music-ctrl {
-            position: fixed; bottom: 30px; left: 30px; z-index: 1000;
-            background: var(--glass); padding: 12px; border-radius: 50px;
-            border: 1px solid var(--neon-pink); display: flex; align-items: center; gap: 10px;
-        }
-        .play-pause { background: none; border: none; color: #fff; cursor: none; font-size: 1rem; }
+  /* LOADER */
+  #preloader { position: fixed; inset: 0; background: var(--bg); z-index: 10001; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s ease-out; }
+  .loader-logo { font-family: 'Orbitron'; font-size: 1.5rem; letter-spacing: 5px; color: #fff; margin-bottom: 20px; text-shadow: 0 0 20px rgba(255,255,255,0.4); }
+  .loader-bar { width: 200px; height: 1px; background: rgba(0,255,136,0.1); position: relative; overflow: hidden; }
+  .loader-progress { position: absolute; width: 100%; height: 100%; background: var(--neon-green); left: -100%; animation: load 1.2s infinite; }
+  @keyframes load { 0% { left: -100%; } 50% { left: 0; } 100% { left: 100%; } }
 
-        /* --- RESPONSIVENESS --- */
-        @media (max-width: 900px) {
-            nav { padding: 1.5rem 2rem; }
-            .hero-bg-img { height: 70%; right: -20%; }
-            .grid { grid-template-columns: 1fr; }
-        }
-    </style>
+  /* MOBILE RESPONSIVENESS */
+  @media(max-width:900px){
+    nav{padding:1rem 2rem} .nav-links{display:none}
+    section{padding:50px 1.5rem} h1{font-size:3rem}
+    .grid{grid-template-columns:1fr} .about-stats{grid-template-columns:repeat(2,1fr)}
+    .hero-bg-img { height: 70%; right: -20%; }
+  }
+</style>
 </head>
 <body>
 
-    <div id="preloader">
-        <h2 style="font-family: 'Orbitron'; letter-spacing: 5px;">THRONELEAF</h2>
-        <div class="loader-bar"><div class="loader-progress"></div></div>
+  <div class="noise-overlay"></div>
+
+  <div id="preloader">
+      <h2 class="loader-logo">THRONELEAF</h2>
+      <div class="loader-bar"><div class="loader-progress"></div></div>
+  </div>
+
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <nav>
+    <a href="#hero" class="nav-logo">CHETAN.<span>JOSHI</span></a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#games">Games</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <section id="hero">
+    <video class="hero-video-bg" autoplay loop muted playsinline>
+      <source src="11.mp4" type="video/mp4">
+    </video>
+    
+    <img src="CJ.png" alt="Chetan Joshi" class="hero-bg-img">
+    
+    <div class="hero-content">
+      <div class="hero-tag">// LEAD DEVELOPER & 3D ARTIST</div>
+      <h1>Chetan <br><span class="grad-text">Joshi</span></h1>
+      <p style="color: var(--text); max-width: 500px; margin: 0 auto 2.5rem; font-size: 1.1rem; font-weight: 300;">
+        Founding <strong style="color:var(--neon-green);">ThroneLeaf Games</strong>. Crafting stylized 3D environments, complex physics mechanics, and immersive experiences for mobile and PC. Currently building <strong>TenGen Parkour</strong>.
+      </p>
+      <div class="hero-ctas">
+        <a href="#games" class="btn btn-green">View Project Files</a>
+        <a href="#contact" class="btn btn-ghost">Collaborate</a>
+      </div>
     </div>
+  </section>
 
-    <div id="cursor"></div>
-    <div id="cursor-follower"></div>
+  <section id="about">
+    <div class="inner">
+      <p class="section-label">// Who I Am</p>
+      <h2>About Me</h2>
+      <div class="divider"></div>
+      <p class="about-bio">
+        I am <strong>Chetan Joshi</strong>, a seasoned Game Developer and 3D Artist dedicated to creating high-fidelity visual experiences. As the founder of <strong>ThroneLeaf Games</strong>, I specialize in bringing together complex programming logic and artistic direction. My expertise lies in stylized 3D pipelines, physics mechanics, and immersive environment design for high-end mobile and PC projects, published on <strong>Google Play & App Store</strong>.
+      </p>
+      <div class="about-stats">
+        <div class="stat-card">
+          <div class="stat-num">Lead</div>
+          <div class="stat-label">Developer</div>
+        </div>
+        <div class="stat-card" style="border-left-color:var(--neon-blue);">
+          <div class="stat-num" style="color:var(--neon-blue);">3D</div>
+          <div class="stat-label">Artist</div>
+        </div>
+        <div class="stat-card" style="border-left-color:var(--neon-pink);">
+          <div class="stat-num" style="color:var(--neon-pink);">Active</div>
+          <div class="stat-label">TenGen Project</div>
+        </div>
+        <div class="stat-card" style="border-left-color:#ffcc00;">
+          <div class="stat-num" style="color:#ffcc00;">Found</div>
+          <div class="stat-label">ThroneLeaf Games</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <nav>
-        <div class="logo-box">CHETAN<span>JOSHI</span></div>
-        <ul class="nav-links">
-            <li><a href="#hero">Home</a></li>
-            <li><a href="#work">Projects</a></li>
-            <li><a href="#3d">3D Assets</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
+  <section id="games">
+    <div class="inner">
+      <p class="section-label">// [ FILE_NAME: TEN_GEN_PARKOUR ]</p>
+      <h2>TenGen Project</h2>
+      <div class="divider"></div>
+      <div class="grid">
 
-    <section id="hero">
-        <video class="hero-video-bg" autoplay loop muted playsinline>
-            <source src="11.mp4" type="video/mp4">
-        </video>
-        <img src="CJ.png" alt="Chetan Joshi" class="hero-bg-img">
+        <div class="card">
+          <div class="card-media">
+              <video poster="12.png" loop muted autoplay playsinline>
+                  <source src="15.mp4" type="video/mp4">
+              </video>
+          </div>
+          <div class="card-body">
+              <span class="card-category">Gameplay Reel</span>
+              <h3 class="card-title">TenGen Movement mechanics</h3>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-media"><img src="100.png" loading="lazy"></div>
+          <div class="card-body">
+              <span class="card-category">Level Snap 01</span>
+              <h3 class="card-title">Urban Environment Mockup</h3>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-media"><img src="101.png" loading="lazy"></div>
+          <div class="card-body">
+              <span class="card-category">Technical View</span>
+              <h3 class="card-title">Platform & Obstacle Layout</h3>
+          </div>
+        </div>
         
-        <div class="hero-content">
-            <div class="hero-tag">// LEAD DEVELOPER & 3D ARTIST</div>
-            <h1>Chetan <br><span class="grad-text">Joshi</span></h1>
-            <p style="color: var(--text-dim); max-width: 500px; margin-bottom: 2.5rem; font-size: 1.1rem;">
-                Crafting high-fidelity stylized 3D environments and complex game mechanics. 
-                Founder of ThroneLeaf Games. Currently building <strong>TenGen Parkour</strong>.
-            </p>
-            <a href="#work" class="btn">ENTER PROJECT FILES</a>
         </div>
-    </section>
-
-    <section id="work">
-        <div class="section-header">
-            <p style="font-family: 'Share Tech Mono'; color: var(--neon-pink);">[ FILE_NAME: TEN_GEN_PARKOUR ]</p>
-            <h2>Gameplay & Development</h2>
-            <div></div>
-        </div>
-        <div class="grid">
-            <div class="card">
-                <div class="card-media">
-                    <video poster="12.png" loop muted autoplay>
-                        <source src="15.mp4" type="video/mp4">
-                    </video>
-                </div>
-                <div class="card-body">
-                    <span class="card-category">Core Gameplay</span>
-                    <h3 class="card-title">TenGen Parkour Reel</h3>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-media"><img src="100.png" loading="lazy"></div>
-                <div class="card-body">
-                    <span class="card-category">Environment</span>
-                    <h3 class="card-title">Alpha Level Snap 01</h3>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-media"><img src="101.png" loading="lazy"></div>
-                <div class="card-body">
-                    <span class="card-category">Atmosphere</span>
-                    <h3 class="card-title">Urban View Study</h3>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="3d" style="background: var(--bg-accent);">
-        <div class="section-header">
-            <p style="font-family: 'Share Tech Mono'; color: var(--neon-blue);">[ SECTOR: HIGH_POLY_RENDERS ]</p>
-            <h2>Q-Ship Technicals</h2>
-            <div></div>
-        </div>
-        <div class="grid">
-            <div class="card">
-                <div class="card-media"><img src="5.jpg" loading="lazy"></div>
-                <div class="card-body">
-                    <span class="card-category">Final Render</span>
-                    <h3 class="card-title">High-End Beauty Shot</h3>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-media"><img src="6.jpg" loading="lazy"></div>
-                <div class="card-body">
-                    <span class="card-category">Wireframe</span>
-                    <h3 class="card-title">Topology & Flow</h3>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-media"><img src="54.png" loading="lazy"></div>
-                <div class="card-body">
-                    <span class="card-category">Nodes</span>
-                    <h3 class="card-title">Technical Shader Graph</h3>
-                </div>
-            </div>
-            </div>
-    </section>
-
-    <section>
-        <div class="grid">
-            <div style="padding: 40px;">
-                <h2 style="font-family: 'Orbitron'; margin-bottom: 20px;">Bipedal <br>Robotics</h2>
-                <p style="color: var(--text-dim);">Detailed study of hydraulic systems and leg joint mechanics for robotic entities.</p>
-                <div class="stats-bar" style="margin-top: 30px; padding: 20px;">
-                    <img src="69.png" style="width: 100%; border-radius: 4px;">
-                </div>
-            </div>
-            <div class="grid">
-                <img src="64.png" style="width: 100%; height: 200px; object-fit: cover;">
-                <img src="65.png" style="width: 100%; height: 200px; object-fit: cover;">
-                <img src="66.png" style="width: 100%; height: 200px; object-fit: cover;">
-                <img src="45.png" style="width: 100%; height: 200px; object-fit: cover;">
-            </div>
-        </div>
-    </section>
-
-    <div class="music-ctrl">
-        <button class="play-pause" id="audioBtn">▶</button>
-        <div style="font-family: 'Share Tech Mono'; font-size: 0.7rem;">S.MP3 // AMBIENCE</div>
-        <audio id="bgMusic" src="S.mp3" loop></audio>
     </div>
+  </section>
+  
+  <div class="music-ctrl">
+    <button class="play-pause" id="audioBtn">▶</button>
+    <div style="font-family: 'Share Tech Mono'; font-size: 0.7rem; color:#fff;">S.MP3 // AMBIENCE</div>
+    <audio id="bgMusic" src="S.mp3" loop></audio>
+  </div>
 
-    <footer>
-        <div class="footer-logo">CHETAN JOSHI</div>
-        <p style="color: var(--text-dim);">Lead Dev @ ThroneLeaf Games | 3D Artist | 2026</p>
-    </footer>
+  <footer>
+    <div class="footer-logo">CHETAN JOSHI</div>
+    <p>Lead Developer & 3D Artist @ ThroneLeaf Games | Surat, India | 2026</p>
+  </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script>
-        // Smooth Loader Logic
-        window.addEventListener('load', () => {
-            const preloader = document.getElementById('preloader');
-            setTimeout(() => {
-                preloader.style.opacity = '0';
-                setTimeout(() => preloader.style.display = 'none', 600);
-            }, 1000);
-        });
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script>
+    (function() {
+      // LOADER
+      window.addEventListener('load', () => {
+          const preloader = document.getElementById('preloader');
+          setTimeout(() => {
+              preloader.style.opacity = '0';
+              setTimeout(() => preloader.style.display = 'none', 600);
+          }, 800);
+      });
 
-        // Custom Cursor Movement
-        const cursor = document.getElementById('cursor');
-        const follower = document.getElementById('cursor-follower');
+      // CURSOR
+      var dot  = document.getElementById('cursor');
+      var ring = document.getElementById('cursor-ring');
+      
+      document.addEventListener('mousemove', (e) => {
+          gsap.to(dot, { x: e.clientX, y: e.clientY, duration: 0 });
+          gsap.to(ring, { x: e.clientX - 17, y: e.clientY - 17, duration: 0.2 });
+      });
 
-        document.addEventListener('mousemove', (e) => {
-            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0 });
-            gsap.to(follower, { x: e.clientX - 17, y: e.clientY - 17, duration: 0.3 });
-        });
+      // AUDIO LOGIC & AUTO-PLAY ATTEMPT
+      const audioBtn = document.getElementById('audioBtn');
+      const bgMusic = document.getElementById('bgMusic');
+      let isPlaying = false;
 
-        // Audio Logic
-        const audioBtn = document.getElementById('audioBtn');
-        const bgMusic = document.getElementById('bgMusic');
-        let isPlaying = false;
+      audioBtn.onclick = togglePlay;
 
-        audioBtn.onclick = () => {
-            if (isPlaying) {
-                bgMusic.pause();
-                audioBtn.innerText = '▶';
-            } else {
-                bgMusic.play();
+      function togglePlay() {
+        if (isPlaying) {
+            bgMusic.pause();
+            audioBtn.innerText = '▶';
+        } else {
+            bgMusic.play();
+            audioBtn.innerText = '||';
+        }
+        isPlaying = !isPlaying;
+      }
+
+      /* --- NOTE ABOUT AUTO-PLAY ---
+         Modern browsers generally block auto-playing audio with sound until the user interacts with the page (click, keypress).
+         This code is a PROGRAMMATIC ATTEMPT to auto-play on load. If the browser blocks it, it will gracefully fall back,
+         and the user will need to click the play button.
+      */
+      window.addEventListener('DOMContentLoaded', (event) => {
+        // Fallback approach: Try auto-play. Most browsers will block this silently.
+        // We catch the error to prevent console errors and handle it as "blocked."
+        bgMusic.play()
+            .then(() => {
+                // Autoplay successful
+                isPlaying = true;
                 audioBtn.innerText = '||';
-            }
-            isPlaying = !isPlaying;
-        };
-
-        // Scroll Reveal for Cards
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
+            })
+            .catch((error) => {
+                // Autoplay was blocked
+                // console.log("Automatic playback blocked by browser.");
+                audioBtn.innerText = '▶';
+                isPlaying = false;
             });
-        }, { threshold: 0.1 });
+      });
 
-        document.querySelectorAll('.card').forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            card.style.transition = 'all 0.8s ease-out';
-            observer.observe(card);
-        });
-    </script>
+      // Scroll reveal for cards
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.from(".card", {
+        opacity: 0,
+        y: 30,
+        duration: 0.8,
+        stagger: 0.2,
+        scrollTrigger: {
+            trigger: "#games",
+            start: "top 80%",
+            toggleActions: "play none none none"
+        }
+      });
+
+    })();
+  </script>
 </body>
 </html>
