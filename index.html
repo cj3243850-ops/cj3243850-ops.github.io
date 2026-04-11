@@ -1,13 +1,239 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/CJ.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chetan Joshi | 3D Artist & Game Dev</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chirag Ramoliya — Manga Dev Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+  :root {
+    --bg: #080a0f;
+    --neon-green: #00ff88;
+    --neon-pink: #ff0066;
+    --neon-blue: #00cfff;
+    --text: #c8d6e5;
+    --card: rgba(15, 20, 28, 0.9);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+  body { 
+    background: var(--bg); 
+    color: var(--text); 
+    font-family: 'Rajdhani', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* CUSTOM CURSOR */
+  #cursor { width: 12px; height: 12px; background: var(--neon-green); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; box-shadow: 0 0 15px var(--neon-green); mix-blend-mode: screen; }
+  #cursor-ring { width: 36px; height: 36px; border: 1.5px solid var(--neon-green); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; }
+
+  /* OVERLAYS */
+  .noise-overlay { position: fixed; inset: 0; pointer-events: none; z-index: 1000; opacity: 0.15; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .scan-overlay { position: fixed; inset: 0; pointer-events: none; z-index: 999; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px); }
+
+  /* NAV */
+  nav { position: fixed; top: 0; width: 100%; z-index: 100; padding: 1.2rem 3rem; display: flex; justify-content: space-between; align-items: center; background: rgba(8,10,15,0.8); backdrop-filter: blur(10px); }
+  .nav-logo { font-family: 'Orbitron'; color: var(--neon-green); text-decoration: none; font-weight: 900; letter-spacing: 2px; }
+
+  /* CHARACTER GUIDE */
+  #cj-guide { position: fixed; bottom: 20px; left: 20px; width: 100px; z-index: 1001; filter: drop-shadow(0 0 10px var(--neon-blue)); }
+  #bubble { position: fixed; bottom: 130px; left: 40px; background: white; color: #000; padding: 10px 15px; border-radius: 10px; font-family: 'Share Tech Mono'; font-size: 0.8rem; z-index: 1001; max-width: 200px; clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 25% 75%, 0% 100%, 0% 75%); }
+
+  /* HORIZONTAL ENGINE */
+  .container { display: flex; width: 800vw; height: 100vh; }
+  section { 
+    min-width: 100vw; height: 100vh; position: relative; 
+    display: flex; justify-content: center; align-items: center; 
+    padding: 0 5%; border-right: 1px solid rgba(0,255,136,0.1);
+  }
+
+  .section-label { position: absolute; top: 120px; left: 50px; font-family: 'Orbitron'; font-size: 5rem; opacity: 0.05; text-transform: uppercase; color: white; white-space: nowrap; }
+
+  /* MANGA GRID LOGIC */
+  .manga-grid {
+    display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: repeat(12, 1fr);
+    width: 90%; height: 70%; gap: 15px;
+  }
+  .panel { 
+    background: var(--card); border: 1px solid var(--dim); overflow: hidden; position: relative;
+    clip-path: polygon(2% 0%, 100% 0%, 98% 100%, 0% 100%); transition: 0.4s;
+  }
+  .panel:hover { border-color: var(--neon-green); transform: scale(1.02); z-index: 10; box-shadow: 0 0 30px rgba(0,255,136,0.2); }
+  .panel img, .panel video { width: 100%; height: 100%; object-fit: cover; }
+  
+  /* Section Specific Layouts */
+  .p-large { grid-column: span 6; grid-row: span 12; }
+  .p-med { grid-column: span 3; grid-row: span 6; }
+  .p-small { grid-column: span 3; grid-row: span 6; }
+
+</style>
+</head>
+<body>
+
+<div class="noise-overlay"></div>
+<div class="scan-overlay"></div>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<nav>
+  <a href="#" class="nav-logo">THRONELEAF // CHIRAG</a>
+  <audio id="bg-track" loop><source src="S.mp3" type="audio/mpeg"></audio>
+</nav>
+
+<div id="bubble">Bhai, scroll karke portfolio dekho!</div>
+<img src="CJ.png" id="cj-guide" alt="CJ Guide">
+
+<div class="container">
+  
+  <section id="identity">
+    <div class="section-label">Identity & Ambience</div>
+    <div class="manga-grid">
+      <div class="panel p-large"><img src="CJ.png"></div>
+      <div class="panel p-med" style="display:flex; flex-direction:column; justify-content:center; padding:20px; background:linear-gradient(45deg, #0f141c, #1a1f2e);">
+        <h2 style="font-family:'Orbitron'; color:var(--neon-green);">CHIRAG RAMOLIYA</h2>
+        <p style="font-family:'Share Tech Mono'; color:var(--neon-pink);">// Lead Dev @ ThroneLeaf Games</p>
+        <p style="font-size:0.9rem; margin-top:10px;">Building stylized 3D worlds and high-octane game mechanics.</p>
+      </div>
+      <div class="panel p-med" style="background:var(--neon-blue); color:black; display:flex; align-items:center; justify-content:center; text-align:center;">
+        <p style="font-weight:900; font-family:'Orbitron';">MUSIC LOGIC:<br>S.mp3 ACTIVE</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="tengen">
+    <div class="section-label">TenGen Parkour</div>
+    <div class="manga-grid">
+      <div class="panel p-large"><video autoplay muted loop poster="12.png"><source src="15.mp4" type="video/mp4"></video></div>
+      <div class="panel p-med"><img src="100.png"></div>
+      <div class="panel p-med"><img src="101.png"></div>
+      <div class="panel p-small"><img src="13.png"></div>
+      <div class="panel p-small"><img src="14.png"></div>
+    </div>
+  </section>
+
+  <section id="qship">
+    <div class="section-label">Q-Ship: 3D Masterpiece</div>
+    <div class="manga-grid">
+      <div class="panel p-med"><img src="5.jpg"></div>
+      <div class="panel p-med"><img src="6.jpg"></div>
+      <div class="panel p-med"><img src="54.png"></div>
+      <div class="panel p-med"><img src="56.png"></div>
+      <div class="panel p-small"><img src="61.png"></div>
+      <div class="panel p-small"><img src="4.jpg"></div>
+      <div class="panel p-small"><img src="7.png"></div>
+      <div class="panel p-small"><img src="10.png"></div>
+    </div>
+  </section>
+
+  <section id="robotics">
+    <div class="section-label">Bipedal Robotics</div>
+    <div class="manga-grid">
+      <div class="panel" style="grid-column: span 4; grid-row: span 12;"><img src="69.png"></div>
+      <div class="panel" style="grid-column: span 8; grid-row: span 4;"><img src="64.png"></div>
+      <div class="panel" style="grid-column: span 4; grid-row: span 8;"><img src="65.png"></div>
+      <div class="panel" style="grid-column: span 4; grid-row: span 8;"><img src="66.png"></div>
+    </div>
+  </section>
+
+  <section id="stylized">
+    <div class="section-label">Help Me Series</div>
+    <div class="manga-grid">
+      <div class="panel" style="grid-column: span 8; grid-row: span 12;"><img src="2.png"></div>
+      <div class="panel" style="grid-column: span 4; grid-row: span 12;"><img src="3.png"></div>
+    </div>
+  </section>
+
+  <section id="arch">
+    <div class="section-label">Sci-Fi & Tech</div>
+    <div class="manga-grid">
+      <div class="panel p-med"><img src="9.png"></div>
+      <div class="panel p-med"><img src="8.png"></div>
+      <div class="panel" style="grid-column: span 6; grid-row: span 12;"><img src="45.png"></div>
+    </div>
+  </section>
+
+  <section id="logic">
+    <div class="section-label">2D Logic & Scripts</div>
+    <div class="manga-grid">
+      <div class="panel p-small"><img src="40.png"></div>
+      <div class="panel p-small"><img src="41.png"></div>
+      <div class="panel p-small"><img src="42.png"></div>
+      <div class="panel p-small"><img src="43.png"></div>
+      <div class="panel" style="grid-column: span 4; grid-row: span 6;"><img src="44.png"></div>
+      <div class="panel" style="grid-column: span 8; grid-row: span 6; background:var(--neon-green); color:black; display:flex; align-items:center; justify-content:center;">
+          <h1 style="font-family:'Orbitron';">LET'S COLLAB_</h1>
+      </div>
+    </div>
+  </section>
+
+  <section id="outro">
+    <div class="section-label">Cinematic Intro</div>
+    <div class="manga-grid">
+        <div class="panel" style="grid-column: span 12; grid-row: span 12;">
+            <video autoplay muted loop><source src="11.mp4" type="video/mp4"></video>
+            <div style="position:absolute; bottom:50px; left:50px;">
+                <h2 style="font-family:'Orbitron'; font-size:3rem; color:white;">END OF STAGE 1</h2>
+                <p style="font-family:'Share Tech Mono'; color:var(--neon-pink);">Back to Reality or Scroll to Restart.</p>
+            </div>
+        </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  // CUSTOM CURSOR
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  document.addEventListener('mousemove', (e) => {
+    gsap.to(cursor, {x: e.clientX, y: e.clientY, duration: 0.1});
+    gsap.to(ring, {x: e.clientX - 12, y: e.clientY - 12, duration: 0.3});
+  });
+
+  // HORIZONTAL SCROLL
+  let sections = gsap.utils.toArray("section");
+  gsap.to(sections, {
+    xPercent: -100 * (sections.length - 1),
+    ease: "none",
+    scrollTrigger: {
+      trigger: ".container",
+      pin: true,
+      scrub: 1,
+      snap: 1 / (sections.length - 1),
+      end: () => "+=" + document.querySelector(".container").offsetWidth
+    }
+  });
+
+  // CJ CHARACTER MESSAGES
+  const messages = [
+    "Identity & Ambience: Swagat hai meri duniya mein!",
+    "TenGen Parkour: Speed aur movement ka kamaal dekho.",
+    "Q-Ship: 3D Topology aur Shaders ka masterclass.",
+    "Bipedal Robotics: Mechanical joints kaise move karte hain?",
+    "Help Me: Stylized painterly look ki art direction.",
+    "Sci-Fi Tower: Lighting aur atmosphere ka khel.",
+    "2D Logic: Coding blocks se hi toh magic hota hai!",
+    "Stage Complete! Bhai, kaam pasand aaya?"
+  ];
+
+  ScrollTrigger.create({
+    trigger: ".container",
+    start: "top top",
+    onUpdate: (self) => {
+      let idx = Math.floor(self.progress * (messages.length - 1));
+      document.getElementById("bubble").innerText = messages[idx];
+    }
+  });
+
+  // Music Play on interaction
+  document.body.addEventListener('click', () => {
+    document.getElementById('bg-track').play();
+  }, {once: true});
+
+</script>
+</body>
 </html>
