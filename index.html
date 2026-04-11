@@ -1,234 +1,364 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chirag — Lead Dev & 3D Artist | ThroneLeaf Games</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #05070a;
-    --bg2: #0a0d14;
-    --neon-green: #00ff88;
-    --neon-pink: #ff0066;
-    --neon-blue: #00cfff;
-    --dim: #161b22;
-    --text: #c8d6e5;
-    --muted: #5a6a7e;
-    --card: rgba(15, 20, 28, 0.8);
-    --max: 1100px;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chetan Joshi — Lead Dev & 3D Artist | ThroneLeaf Games</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #050508;
+            --bg-accent: #0a0a0f;
+            --neon-green: #00ff88;
+            --neon-pink: #ff0066;
+            --neon-blue: #00cfff;
+            --text-main: #e0e6ed;
+            --text-dim: #94a3b8;
+            --glass: rgba(15, 23, 42, 0.8);
+            --border: rgba(255, 255, 255, 0.1);
+        }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Rajdhani', sans-serif;
-    overflow-x: hidden;
-    cursor: none;
-  }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+            cursor: none; /* Custom cursor functionality */
+        }
 
-  /* CURSOR */
-  #cursor { width: 10px; height: 10px; background: var(--neon-green); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; box-shadow: 0 0 15px var(--neon-green); }
-  #cursor-ring { width: 40px; height: 40px; border: 1.5px solid rgba(0,255,136,0.3); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; transition: transform 0.1s; }
+        /* --- PRELOADER --- */
+        #preloader {
+            position: fixed; inset: 0; background: var(--bg);
+            z-index: 10000; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .loader-bar {
+            width: 200px; height: 2px; background: rgba(0,255,136,0.1);
+            position: relative; overflow: hidden; margin-top: 20px;
+        }
+        .loader-progress {
+            position: absolute; width: 100%; height: 100%;
+            background: var(--neon-green); left: -100%;
+            animation: load 1.5s infinite;
+        }
+        @keyframes load { 0% { left: -100%; } 50% { left: 0; } 100% { left: 100%; } }
 
-  /* NAVIGATION */
-  nav {
-    position: fixed; top: 0; width: 100%; z-index: 100;
-    padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center;
-    background: rgba(5, 7, 10, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,255,136,0.1);
-  }
-  .logo { font-family: 'Orbitron'; font-weight: 900; color: var(--neon-green); text-decoration: none; letter-spacing: 2px; }
+        /* --- CUSTOM CURSOR --- */
+        #cursor {
+            width: 8px; height: 8px; background: var(--neon-green);
+            border-radius: 50%; position: fixed; pointer-events: none;
+            z-index: 9999; box-shadow: 0 0 15px var(--neon-green);
+        }
+        #cursor-follower {
+            width: 35px; height: 35px; border: 1px solid var(--neon-green);
+            border-radius: 50%; position: fixed; pointer-events: none;
+            z-index: 9998; transition: transform 0.15s ease-out;
+            opacity: 0.5;
+        }
 
-  /* HERO SECTION */
-  #hero {
-    height: 100vh; display: flex; align-items: center; justify-content: center;
-    position: relative; overflow: hidden; padding: 0 2rem;
-  }
-  .hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.3; z-index: -1; }
-  .hero-content { text-align: center; z-index: 2; }
-  .profile-img { width: 180px; height: 180px; border-radius: 50%; border: 3px solid var(--neon-green); margin-bottom: 1.5rem; box-shadow: 0 0 30px rgba(0,255,136,0.3); }
-  h1 { font-family: 'Orbitron'; font-size: clamp(2.5rem, 6vw, 5rem); color: #fff; line-height: 1; margin-bottom: 1rem; }
-  .grad-text { background: linear-gradient(90deg, var(--neon-green), var(--neon-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  
-  /* ASSET GRID */
-  .section-title { font-family: 'Orbitron'; font-size: 2rem; text-align: center; margin-bottom: 3rem; color: #fff; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; max-width: var(--max); margin: 0 auto; padding: 0 2rem; }
-  
-  .asset-card {
-    background: var(--card); border: 1px solid var(--dim); border-radius: 12px; overflow: hidden;
-    transition: 0.3s ease; position: relative;
-  }
-  .asset-card:hover { transform: translateY(-10px); border-color: var(--neon-green); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-  .asset-img { width: 100%; height: 220px; object-fit: cover; }
-  .asset-info { padding: 1.5rem; }
-  .asset-tag { font-family: 'Share Tech Mono'; font-size: 0.7rem; color: var(--neon-pink); text-transform: uppercase; margin-bottom: 0.5rem; display: block; }
-  
-  /* VIDEO SPECIAL CARD */
-  .video-container { position: relative; height: 220px; }
-  .play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-size: 3rem; opacity: 0.8; }
+        /* --- BACKGROUND GRADIENTS & NOISE --- */
+        .noise {
+            position: fixed; inset: 0; z-index: 1; opacity: 0.03; pointer-events: none;
+            background-image: url('data:image/svg+xml,...'); /* SVG Noise */
+        }
 
-  /* SKILLS & ARCHITECTURE */
-  #tech-stack { background: var(--bg2); padding: 5rem 0; }
-  .tech-card { padding: 1rem; border-left: 3px solid var(--neon-blue); background: rgba(0,207,255,0.05); margin-bottom: 1rem; }
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            padding: 1.5rem 4rem; display: flex; justify-content: space-between;
+            align-items: center; background: rgba(5, 5, 8, 0.85);
+            backdrop-filter: blur(15px); border-bottom: 1px solid var(--border);
+        }
+        .logo-box { font-family: 'Orbitron'; font-weight: 900; letter-spacing: 3px; }
+        .logo-box span { color: var(--neon-green); text-shadow: 0 0 10px var(--neon-green); }
+        .nav-links { display: flex; gap: 3rem; list-style: none; }
+        .nav-links a {
+            text-decoration: none; color: var(--text-dim);
+            font-family: 'Share Tech Mono'; font-size: 0.85rem;
+            transition: 0.3s; text-transform: uppercase;
+        }
+        .nav-links a:hover { color: var(--neon-green); }
 
-  /* AUDIO PLAYER */
-  .music-player { position: fixed; bottom: 20px; right: 20px; z-index: 1000; background: var(--card); padding: 10px; border-radius: 50px; border: 1px solid var(--neon-green); display: flex; align-items: center; gap: 10px; }
-  .music-btn { background: none; border: none; color: var(--neon-green); cursor: none; font-size: 1.2rem; }
+        /* --- HERO SECTION (CJ.png as Background) --- */
+        #hero {
+            height: 100vh; position: relative; display: flex;
+            align-items: center; justify-content: flex-start;
+            padding-left: 10%; overflow: hidden;
+        }
+        .hero-bg-img {
+            position: absolute; right: -5%; top: 50%; transform: translateY(-50%);
+            height: 110%; width: auto; z-index: -1;
+            filter: drop-shadow(-20px 0 50px rgba(255, 0, 102, 0.2)) saturate(1.2);
+            mask-image: linear-gradient(to left, black 60%, transparent 100%);
+            opacity: 0.9;
+        }
+        .hero-video-bg {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            object-fit: cover; opacity: 0.15; z-index: -2;
+        }
+        .hero-content { max-width: 800px; z-index: 10; }
+        .hero-tag { font-family: 'Share Tech Mono'; color: var(--neon-pink); font-size: 1.1rem; margin-bottom: 1rem; }
+        h1 {
+            font-family: 'Orbitron'; font-size: clamp(3rem, 8vw, 6rem);
+            line-height: 0.9; color: #fff; margin-bottom: 2rem;
+        }
+        .grad-text { background: linear-gradient(90deg, #fff, var(--neon-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* --- BUTTONS --- */
+        .btn {
+            padding: 1rem 2.5rem; font-family: 'Orbitron'; font-size: 0.8rem;
+            text-decoration: none; border: 1px solid var(--neon-green);
+            color: var(--neon-green); position: relative; overflow: hidden;
+            background: transparent; transition: 0.4s; display: inline-block;
+        }
+        .btn:hover { background: var(--neon-green); color: #000; box-shadow: 0 0 30px var(--neon-green); }
 
-  @media (max-width: 768px) {
-    nav { padding: 1rem; }
-    h1 { font-size: 2.5rem; }
-  }
-</style>
+        /* --- PORTFOLIO SECTIONS --- */
+        section { padding: 100px 10%; position: relative; z-index: 5; }
+        .section-header { margin-bottom: 60px; }
+        .section-header h2 { font-family: 'Orbitron'; font-size: 2.5rem; color: #fff; }
+        .section-header div { width: 50px; height: 3px; background: var(--neon-pink); margin-top: 10px; }
+
+        /* --- ASSET GRID LOGIC --- */
+        .grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+        }
+        .card {
+            background: var(--bg-accent); border: 1px solid var(--border);
+            border-radius: 4px; overflow: hidden; transition: 0.5s;
+        }
+        .card:hover { transform: translateY(-10px); border-color: var(--neon-green); }
+        .card-media { width: 100%; height: 240px; overflow: hidden; position: relative; }
+        .card-media img, .card-media video { 
+            width: 100%; height: 100%; object-fit: cover; 
+            transition: 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+        .card:hover .card-media img { transform: scale(1.1); }
+        .card-body { padding: 25px; }
+        .card-category { font-family: 'Share Tech Mono'; color: var(--neon-blue); font-size: 0.75rem; }
+        .card-title { font-family: 'Orbitron'; font-size: 1.1rem; margin: 10px 0; color: #fff; }
+
+        /* --- STATS SECTION --- */
+        .stats-bar {
+            display: flex; justify-content: space-around; background: var(--glass);
+            padding: 50px; border: 1px solid var(--border); margin: 50px 0;
+        }
+        .stat-item h3 { font-family: 'Orbitron'; font-size: 2.5rem; color: var(--neon-green); }
+        .stat-item p { font-family: 'Share Tech Mono'; color: var(--text-dim); font-size: 0.9rem; }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #020205; padding: 60px 10%; border-top: 1px solid var(--border);
+            text-align: center;
+        }
+        .footer-logo { font-family: 'Orbitron'; font-size: 1.5rem; color: #fff; margin-bottom: 20px; }
+
+        /* --- AUDIO PLAYER --- */
+        .music-ctrl {
+            position: fixed; bottom: 30px; left: 30px; z-index: 1000;
+            background: var(--glass); padding: 12px; border-radius: 50px;
+            border: 1px solid var(--neon-pink); display: flex; align-items: center; gap: 10px;
+        }
+        .play-pause { background: none; border: none; color: #fff; cursor: none; font-size: 1rem; }
+
+        /* --- RESPONSIVENESS --- */
+        @media (max-width: 900px) {
+            nav { padding: 1.5rem 2rem; }
+            .hero-bg-img { height: 70%; right: -20%; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
 
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
+    <div id="preloader">
+        <h2 style="font-family: 'Orbitron'; letter-spacing: 5px;">THRONELEAF</h2>
+        <div class="loader-bar"><div class="loader-progress"></div></div>
+    </div>
 
-<nav>
-  <a href="#" class="logo">THRONELEAF</a>
-  <div style="font-family: 'Share Tech Mono'; font-size: 0.8rem; color: var(--muted);">// LEAD DEVELOPER</div>
-</nav>
+    <div id="cursor"></div>
+    <div id="cursor-follower"></div>
 
-<section id="hero">
-  <video class="hero-video" autoplay loop muted playsinline>
-    <source src="11.mp4" type="video/mp4">
-  </video>
-  <div class="hero-content">
-    <img src="CJ.png" alt="Chirag" class="profile-img">
-    <div style="font-family: 'Share Tech Mono'; color: var(--neon-pink);">[ SYSTEM INITIALIZED ]</div>
-    <h1>CHIRAG <span class="grad-text">RAMOLIYA</span></h1>
-    <p style="max-width: 600px; margin: 0 auto; color: var(--muted);">3D Artist & Game Developer. Founder of ThroneLeaf Games. Specialized in Stylized Environments and Bipedal Robotics.</p>
-  </div>
-</section>
+    <nav>
+        <div class="logo-box">CHETAN<span>JOSHI</span></div>
+        <ul class="nav-links">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#work">Projects</a></li>
+            <li><a href="#3d">3D Assets</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
 
-<section style="padding: 8rem 0;">
-  <h2 class="section-title">TenGen Parkour <span style="font-size: 0.8rem; vertical-align: middle; color: var(--neon-green);">[ACTIVE PROJECT]</span></h2>
-  <div class="grid">
-    <div class="asset-card">
-      <div class="video-container">
-        <video width="100%" height="100%" poster="12.png" controls>
-          <source src="15.mp4" type="video/mp4">
+    <section id="hero">
+        <video class="hero-video-bg" autoplay loop muted playsinline>
+            <source src="11.mp4" type="video/mp4">
         </video>
-      </div>
-      <div class="asset-info">
-        <span class="asset-tag">Gameplay Trailer</span>
-        <h3>Action Platformer</h3>
-        <p style="font-size: 0.8rem; color: var(--muted);">High-energy movement mechanics & stylized urban environments.</p>
-      </div>
+        <img src="CJ.png" alt="Chetan Joshi" class="hero-bg-img">
+        
+        <div class="hero-content">
+            <div class="hero-tag">// LEAD DEVELOPER & 3D ARTIST</div>
+            <h1>Chetan <br><span class="grad-text">Joshi</span></h1>
+            <p style="color: var(--text-dim); max-width: 500px; margin-bottom: 2.5rem; font-size: 1.1rem;">
+                Crafting high-fidelity stylized 3D environments and complex game mechanics. 
+                Founder of ThroneLeaf Games. Currently building <strong>TenGen Parkour</strong>.
+            </p>
+            <a href="#work" class="btn">ENTER PROJECT FILES</a>
+        </div>
+    </section>
+
+    <section id="work">
+        <div class="section-header">
+            <p style="font-family: 'Share Tech Mono'; color: var(--neon-pink);">[ FILE_NAME: TEN_GEN_PARKOUR ]</p>
+            <h2>Gameplay & Development</h2>
+            <div></div>
+        </div>
+        <div class="grid">
+            <div class="card">
+                <div class="card-media">
+                    <video poster="12.png" loop muted autoplay>
+                        <source src="15.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="card-body">
+                    <span class="card-category">Core Gameplay</span>
+                    <h3 class="card-title">TenGen Parkour Reel</h3>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-media"><img src="100.png" loading="lazy"></div>
+                <div class="card-body">
+                    <span class="card-category">Environment</span>
+                    <h3 class="card-title">Alpha Level Snap 01</h3>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-media"><img src="101.png" loading="lazy"></div>
+                <div class="card-body">
+                    <span class="card-category">Atmosphere</span>
+                    <h3 class="card-title">Urban View Study</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="3d" style="background: var(--bg-accent);">
+        <div class="section-header">
+            <p style="font-family: 'Share Tech Mono'; color: var(--neon-blue);">[ SECTOR: HIGH_POLY_RENDERS ]</p>
+            <h2>Q-Ship Technicals</h2>
+            <div></div>
+        </div>
+        <div class="grid">
+            <div class="card">
+                <div class="card-media"><img src="5.jpg" loading="lazy"></div>
+                <div class="card-body">
+                    <span class="card-category">Final Render</span>
+                    <h3 class="card-title">High-End Beauty Shot</h3>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-media"><img src="6.jpg" loading="lazy"></div>
+                <div class="card-body">
+                    <span class="card-category">Wireframe</span>
+                    <h3 class="card-title">Topology & Flow</h3>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-media"><img src="54.png" loading="lazy"></div>
+                <div class="card-body">
+                    <span class="card-category">Nodes</span>
+                    <h3 class="card-title">Technical Shader Graph</h3>
+                </div>
+            </div>
+            </div>
+    </section>
+
+    <section>
+        <div class="grid">
+            <div style="padding: 40px;">
+                <h2 style="font-family: 'Orbitron'; margin-bottom: 20px;">Bipedal <br>Robotics</h2>
+                <p style="color: var(--text-dim);">Detailed study of hydraulic systems and leg joint mechanics for robotic entities.</p>
+                <div class="stats-bar" style="margin-top: 30px; padding: 20px;">
+                    <img src="69.png" style="width: 100%; border-radius: 4px;">
+                </div>
+            </div>
+            <div class="grid">
+                <img src="64.png" style="width: 100%; height: 200px; object-fit: cover;">
+                <img src="65.png" style="width: 100%; height: 200px; object-fit: cover;">
+                <img src="66.png" style="width: 100%; height: 200px; object-fit: cover;">
+                <img src="45.png" style="width: 100%; height: 200px; object-fit: cover;">
+            </div>
+        </div>
+    </section>
+
+    <div class="music-ctrl">
+        <button class="play-pause" id="audioBtn">▶</button>
+        <div style="font-family: 'Share Tech Mono'; font-size: 0.7rem;">S.MP3 // AMBIENCE</div>
+        <audio id="bgMusic" src="S.mp3" loop></audio>
     </div>
-    <div class="asset-card">
-      <img src="100.png" class="asset-img">
-      <div class="asset-info">
-        <span class="asset-tag">Level Design</span>
-        <h3>Alpha Stage View</h3>
-      </div>
-    </div>
-    <div class="asset-card">
-      <img src="14.png" class="asset-img">
-      <div class="asset-info">
-        <span class="asset-tag">Engine Study</span>
-        <h3>Unity Editor Scene</h3>
-      </div>
-    </div>
-  </div>
-</section>
 
-<section style="background: var(--bg2); padding: 8rem 0;">
-  <h2 class="section-title">Q-Ship: 3D Masterpiece</h2>
-  <div class="grid">
-    <div class="asset-card">
-      <img src="5.jpg" class="asset-img">
-      <div class="asset-info">
-        <span class="asset-tag">Beauty Render</span>
-        <h3>High-End fidelity</h3>
-      </div>
-    </div>
-    <div class="asset-card">
-      <img src="6.jpg" class="asset-img">
-      <div class="asset-info">
-        <span class="asset-tag">Topology</span>
-        <h3>Wireframe Analysis</h3>
-      </div>
-    </div>
-    <div class="asset-card">
-      <img src="54.png" class="asset-img">
-      <div class="asset-info">
-        <span class="asset-tag">Technical</span>
-        <h3>Shader Node Graph</h3>
-      </div>
-    </div>
-  </div>
-</section>
+    <footer>
+        <div class="footer-logo">CHETAN JOSHI</div>
+        <p style="color: var(--text-dim);">Lead Dev @ ThroneLeaf Games | 3D Artist | 2026</p>
+    </footer>
 
-<section style="padding: 8rem 0;">
-  <h2 class="section-title">Bipedal Robotics</h2>
-  <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
-    <div class="asset-card"><img src="69.png" class="asset-img"><div class="asset-info"><h4>Ortho Sheet</h4></div></div>
-    <div class="asset-card"><img src="64.png" class="asset-img"><div class="asset-info"><h4>Hydraulic Detail</h4></div></div>
-    <div class="asset-card"><img src="65.png" class="asset-img"><div class="asset-info"><h4>Piston Movement</h4></div></div>
-    <div class="asset-card"><img src="66.png" class="asset-img"><div class="asset-info"><h4>Structural Base</h4></div></div>
-  </div>
-</section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        // Smooth Loader Logic
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                setTimeout(() => preloader.style.display = 'none', 600);
+            }, 1000);
+        });
 
-<section id="tech-stack">
-  <div class="grid">
-    <div>
-      <h2 style="font-family: 'Orbitron'; margin-bottom: 2rem;">2D Logic & UI</h2>
-      <div class="tech-card"><strong>Scripting:</strong> Node-based logic (Ref: 40.png)</div>
-      <div class="tech-card"><strong>UI/UX:</strong> Settings & HUD Design (Ref: 41.png)</div>
-      <div class="tech-card"><strong>Animation:</strong> Sprite Sheet Workflows (Ref: 42.png)</div>
-    </div>
-    <div>
-      <h2 style="font-family: 'Orbitron'; margin-bottom: 2rem;">Hardware & Environment</h2>
-      <img src="9.png" class="asset-img" style="border-radius: 12px; margin-bottom: 1rem;">
-      <p style="font-size: 0.9rem; color: var(--muted);">Atmospheric Sci-Fi Tower Study (Ref: 8.png, 9.png). Arduino Integrated hardware card (Ref: 45.png).</p>
-    </div>
-  </div>
-</section>
+        // Custom Cursor Movement
+        const cursor = document.getElementById('cursor');
+        const follower = document.getElementById('cursor-follower');
 
-<div class="music-player">
-  <button class="music-btn" id="playMusic">♫</button>
-  <span style="font-family: 'Share Tech Mono'; font-size: 0.7rem;">S.mp3 - Ambience</span>
-  <audio id="bgAudio" loop src="S.mp3"></audio>
-</div>
+        document.addEventListener('mousemove', (e) => {
+            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0 });
+            gsap.to(follower, { x: e.clientX - 17, y: e.clientY - 17, duration: 0.3 });
+        });
 
-<footer style="padding: 4rem; text-align: center; border-top: 1px solid var(--dim);">
-  <div style="font-family: 'Orbitron'; color: var(--neon-green); margin-bottom: 1rem;">THRONELEAF GAMES</div>
-  <p style="font-size: 0.8rem; color: var(--muted);">&copy; 2026 Chirag Ramoliya | Built with 3D Passion</p>
-</footer>
+        // Audio Logic
+        const audioBtn = document.getElementById('audioBtn');
+        const bgMusic = document.getElementById('bgMusic');
+        let isPlaying = false;
 
-<script>
-  // CURSOR LOGIC
-  const dot = document.getElementById('cursor');
-  const ring = document.getElementById('cursor-ring');
-  
-  document.addEventListener('mousemove', (e) => {
-    dot.style.left = e.clientX + 'px';
-    dot.style.top = e.clientY + 'px';
-    ring.style.left = (e.clientX - 15) + 'px';
-    ring.style.top = (e.clientY - 15) + 'px';
-  });
+        audioBtn.onclick = () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                audioBtn.innerText = '▶';
+            } else {
+                bgMusic.play();
+                audioBtn.innerText = '||';
+            }
+            isPlaying = !isPlaying;
+        };
 
-  // AUDIO LOGIC
-  const btn = document.getElementById('playMusic');
-  const audio = document.getElementById('bgAudio');
-  let playing = false;
+        // Scroll Reveal for Cards
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
 
-  btn.addEventListener('click', () => {
-    if(!playing) {
-      audio.play();
-      btn.innerHTML = '||';
-      playing = true;
-    } else {
-      audio.pause();
-      btn.innerHTML = '♫';
-      playing = false;
-    }
-  });
-</script>
-
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.8s ease-out';
+            observer.observe(card);
+        });
+    </script>
 </body>
 </html>
