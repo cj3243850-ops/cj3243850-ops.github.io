@@ -23,15 +23,15 @@
         body { background-color: var(--bg); color: var(--text-main); font-family: 'Rajdhani', sans-serif; overflow-x: hidden; cursor: none; width: 100%; }
 
         /* --- PRELOADER --- */
-        #preloader { position: fixed; inset: 0; background: var(--bg); z-index: 40000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s ease; }
+        #preloader { position: fixed; inset: 0; background: var(--bg); z-index: 50000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s ease; }
         .loader-logo { font-family: 'Orbitron'; letter-spacing: 5px; color: #fff; font-size: 24px; }
         .loader-bar { width: 200px; height: 1px; background: rgba(0,255,136,0.1); position: relative; overflow: hidden; margin-top: 15px; }
         .loader-progress { position: absolute; width: 100%; height: 100%; background: var(--neon-green); left: -100%; animation: load 1.2s infinite; }
         @keyframes load { 0% { left: -100%; } 100% { left: 100%; } }
 
-        /* --- CURSOR (Fixed & Always Top) --- */
-        #cursor { width: 8px; height: 8px; background: var(--neon-green); border-radius: 50%; position: fixed; pointer-events: none; z-index: 50000; box-shadow: 0 0 15px var(--neon-green); transform: translate(-50%, -50%); }
-        #cursor-follower { width: 35px; height: 35px; border: 1px solid var(--neon-green); border-radius: 50%; position: fixed; pointer-events: none; z-index: 49999; transition: transform 0.1s ease-out; opacity: 0.5; transform: translate(-50%, -50%); }
+        /* --- CURSOR --- */
+        #cursor { width: 8px; height: 8px; background: var(--neon-green); border-radius: 50%; position: fixed; pointer-events: none; z-index: 60000; box-shadow: 0 0 15px var(--neon-green); transform: translate(-50%, -50%); }
+        #cursor-follower { width: 35px; height: 35px; border: 1px solid var(--neon-green); border-radius: 50%; position: fixed; pointer-events: none; z-index: 59999; transition: transform 0.1s ease-out; opacity: 0.5; transform: translate(-50%, -50%); }
 
         /* --- NAVIGATION --- */
         nav { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 20px 60px; display: flex; justify-content: space-between; align-items: center; background: rgba(5, 5, 8, 0.9); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border); }
@@ -39,34 +39,35 @@
         .logo-box span { color: var(--neon-green); }
 
         /* --- HERO --- */
-        #hero { height: 100vh; position: relative; display: flex; align-items: center; justify-content: flex-end; padding-right: 100px; overflow: hidden; }
+        #hero { height: 100vh; position: relative; display: flex; align-items: center; justify-content: flex-end; padding-right: 100px; overflow: hidden; background: #000; }
         .hero-profile-img { position: absolute; left: 0; top: 0; width: 55%; height: 100%; object-fit: cover; z-index: 1; mask-image: linear-gradient(to left, transparent 5%, black 75%); -webkit-mask-image: linear-gradient(to left, transparent 5%, black 75%); opacity: 0.95; }
-        .hero-video-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.2; z-index: 0; }
+        .hero-video-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.25; z-index: 0; }
         .hero-content { width: 550px; z-index: 10; text-align: right; }
         h1 { font-family: 'Orbitron'; font-size: 85px; line-height: 0.85; color: #fff; font-weight: 900; }
         .grad-text { background: linear-gradient(90deg, #fff, var(--neon-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* --- GRID & CARDS --- */
-        section { padding: 80px 10%; }
+        /* --- GRID & SECTIONS --- */
+        section { padding: 80px 10%; border-bottom: 1px solid rgba(255,255,255,0.02); }
         .section-header { margin-bottom: 40px; text-align: center; font-family: 'Orbitron'; font-size: 28px; color: #fff; text-transform: uppercase; letter-spacing: 2px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; max-width: 1300px; margin: 0 auto; }
         
         .card { background: var(--bg-accent); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: 0.4s; cursor: pointer; }
-        .card:hover { border-color: var(--neon-green); transform: translateY(-5px); }
-        .card-media { width: 100%; height: 200px; overflow: hidden; background: #000; pointer-events: none; }
+        .card:hover { border-color: var(--neon-green); transform: translateY(-5px); box-shadow: 0 0 20px rgba(0,255,136,0.1); }
+        .card-media { width: 100%; height: 180px; overflow: hidden; background: #000; pointer-events: none; }
         .card-media img, .card-media video { width: 100%; height: 100%; object-fit: cover; }
         .card-body { padding: 15px; font-family: 'Share Tech Mono'; font-size: 13px; }
         .badge { color: var(--neon-blue); font-size: 10px; text-transform: uppercase; margin-bottom: 5px; display: block; }
 
-        /* --- LIGHTBOX (Compact Preview) --- */
-        #lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 30000; display: none; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; }
+        /* --- COMPACT LIGHTBOX --- */
+        #lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 45000; display: none; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; }
         #lightbox.open { display: flex; opacity: 1; }
-        .lb-frame { position: relative; border: 1px solid var(--neon-green); max-width: 75%; max-height: 75vh; background: #000; transform: scale(0.9); transition: 0.4s cubic-bezier(0.1, 0.7, 0.1, 1); box-shadow: 0 0 40px rgba(0,255,136,0.15); }
+        .lb-frame { position: relative; border: 1px solid var(--neon-green); max-width: 70%; max-height: 65vh; background: #000; transform: scale(0.9); transition: 0.4s; box-shadow: 0 0 50px rgba(0,255,136,0.2); }
         #lightbox.open .lb-frame { transform: scale(1); }
-        .lb-content { width: 100%; height: auto; max-height: 70vh; display: block; }
+        .lb-content { width: 100%; height: auto; max-height: 64vh; display: block; }
         
-        /* Close Button inside frame above image */
-        .lb-close { position: absolute; top: -30px; right: 0; color: var(--neon-pink); font-family: 'Orbitron'; cursor: pointer; font-size: 11px; letter-spacing: 2px; }
+        /* Close Button inside frame on top of image */
+        .lb-close { position: absolute; top: 10px; right: 15px; color: #fff; background: rgba(255,0,102,0.7); padding: 5px 10px; font-family: 'Orbitron'; cursor: pointer; font-size: 10px; letter-spacing: 1px; z-index: 10; border-radius: 2px; }
+        .lb-close:hover { background: var(--neon-pink); }
 
         .music-ctrl { position: fixed; bottom: 30px; left: 30px; z-index: 1001; background: rgba(15,23,42,0.8); padding: 10px 20px; border-radius: 50px; border: 1px solid var(--neon-pink); display: flex; align-items: center; gap: 12px; backdrop-filter: blur(10px); }
         .play-pause { background: none; border: none; color: #fff; font-size: 16px; cursor: none; }
@@ -86,7 +87,7 @@
 
     <nav>
         <a href="#" class="logo-box">CHETAN<span>JOSHI</span></a>
-        <div style="font-family: 'Share Tech Mono'; font-size: 12px; color: var(--neon-pink);">[ UI/UX_ENGINE_LOADED ]</div>
+        <div style="font-family: 'Share Tech Mono'; font-size: 12px; color: var(--neon-pink);">[ ASSETS_MAPPED: 34_FILES ]</div>
     </nav>
 
     <section id="hero">
@@ -101,10 +102,10 @@
     <section id="game-ui">
         <div class="section-header">Game Interface & UI/UX</div>
         <div class="grid">
-            <div class="card" data-type="image" data-src="700.png"><div class="card-media"><img src="700.png"></div><div class="card-body"><span class="badge">Main Menu</span>Tengen Parkour UI</div></div>
-            <div class="card" data-type="image" data-src="701.png"><div class="card-media"><img src="701.png"></div><div class="card-body"><span class="badge">Settings</span>Control & Audio UX</div></div>
-            <div class="card" data-type="image" data-src="702.png"><div class="card-media"><img src="702.png"></div><div class="card-body"><span class="badge">Pause Menu</span>Master Navigation</div></div>
-            <div class="card" data-type="image" data-src="703.png"><div class="card-media"><img src="703.png"></div><div class="card-body"><span class="badge">Developer Profile</span>In-Game Identity Card</div></div>
+            <div class="card" data-type="image" data-src="700.png"><div class="card-media"><img src="700.png" loading="lazy"></div><div class="card-body"><span class="badge">Main Menu</span>Tengen UI Design</div></div>
+            <div class="card" data-type="image" data-src="701.png"><div class="card-media"><img src="701.png" loading="lazy"></div><div class="card-body"><span class="badge">Settings</span>Audio & Controls</div></div>
+            <div class="card" data-type="image" data-src="702.png"><div class="card-media"><img src="702.png" loading="lazy"></div><div class="card-body"><span class="badge">In-Game</span>Pause Navigation</div></div>
+            <div class="card" data-type="image" data-src="703.png"><div class="card-media"><img src="703.png" loading="lazy"></div><div class="card-body"><span class="badge">Profile</span>Identity System</div></div>
         </div>
     </section>
 
@@ -112,34 +113,42 @@
         <div class="section-header">TenGen Parkour Assets</div>
         <div class="grid">
             <div class="card" data-type="video" data-src="15.mp4"><div class="card-media"><video muted loop autoplay><source src="15.mp4"></video></div><div class="card-body"><span class="badge">Gameplay</span>TenGen Movement Reel</div></div>
-            <div class="card" data-type="image" data-src="100.png"><div class="card-media"><img src="100.png"></div><div class="card-body"><span class="badge">Alpha Level</span>Environment Snap 01</div></div>
-            <div class="card" data-type="image" data-src="101.png"><div class="card-media"><img src="101.png"></div><div class="card-body"><span class="badge">Urban View</span>Environment Snap 02</div></div>
-            <div class="card" data-type="image" data-src="13.png"><div class="card-media"><img src="13.png"></div><div class="card-body"><span class="badge">Detailing</span>Environment Props</div></div>
-            <div class="card" data-type="image" data-src="14.png"><div class="card-media"><img src="14.png"></div><div class="card-body"><span class="badge">Editor</span>Unity Scene Preview</div></div>
+            <div class="card" data-type="image" data-src="100.png"><div class="card-media"><img src="100.png" loading="lazy"></div><div class="card-body"><span class="badge">Level Design</span>Environment Snap 01</div></div>
+            <div class="card" data-type="image" data-src="101.png"><div class="card-media"><img src="101.png" loading="lazy"></div><div class="card-body"><span class="badge">Level Design</span>Environment Snap 02</div></div>
+            <div class="card" data-type="image" data-src="13.png"><div class="card-media"><img src="13.png" loading="lazy"></div><div class="card-body"><span class="badge">Prop</span>Environment Detail</div></div>
+            <div class="card" data-type="image" data-src="14.png"><div class="card-media"><img src="14.png" loading="lazy"></div><div class="card-body"><span class="badge">Editor</span>Unity Scene Preview</div></div>
         </div>
     </section>
 
     <section id="qship" style="background: #08080b;">
         <div class="section-header">Q-Ship Technicals</div>
         <div class="grid">
-            <div class="card" data-type="image" data-src="5.jpg"><div class="card-media"><img src="5.jpg"></div><div class="card-body"><span class="badge">Beauty Render</span>Final Master Shot</div></div>
-            <div class="card" data-type="image" data-src="6.jpg"><div class="card-media"><img src="6.jpg"></div><div class="card-body"><span class="badge">Topology</span>Wireframe Flow</div></div>
-            <div class="card" data-type="image" data-src="54.png"><div class="card-media"><img src="54.png"></div><div class="card-body"><span class="badge">Nodes</span>Technical Shader Graph</div></div>
-            <div class="card" data-type="image" data-src="56.png"><div class="card-media"><img src="56.png"></div><div class="card-body"><span class="badge">UVs</span>Layout & Seams</div></div>
-            <div class="card" data-type="image" data-src="4.jpg"><div class="card-media"><img src="4.jpg"></div><div class="card-body"><span class="badge">Render</span>Alternative Angle</div></div>
-            <div class="card" data-type="image" data-src="7.png"><div class="card-media"><img src="7.png"></div><div class="card-body"><span class="badge">Mesh</span>Base Mesh Setup</div></div>
-            <div class="card" data-type="image" data-src="10.png"><div class="card-media"><img src="10.png"></div><div class="card-body"><span class="badge">Lighting</span>Product Style Fidelity</div></div>
+            <div class="card" data-type="image" data-src="5.jpg"><div class="card-media"><img src="5.jpg" loading="lazy"></div><div class="card-body"><span class="badge">Master</span>Final High-Poly Shot</div></div>
+            <div class="card" data-type="image" data-src="6.jpg"><div class="card-media"><img src="6.jpg" loading="lazy"></div><div class="card-body"><span class="badge">Wireframe</span>Topology Flow</div></div>
+            <div class="card" data-type="image" data-src="54.png"><div class="card-media"><img src="54.png" loading="lazy"></div><div class="card-body"><span class="badge">Technical</span>Shader Node Graph</div></div>
+            <div class="card" data-type="image" data-src="56.png"><div class="card-media"><img src="56.png" loading="lazy"></div><div class="card-body"><span class="badge">UV</span>Layout & Seams</div></div>
+            <div class="card" data-type="image" data-src="61.png"><div class="card-media"><img src="61.png" loading="lazy"></div><div class="card-body"><span class="badge">Workspace</span>Texture Painting</div></div>
+            <div class="card" data-type="image" data-src="10.png"><div class="card-media"><img src="10.png" loading="lazy"></div><div class="card-body"><span class="badge">Lighting</span>Product Style Fidelity</div></div>
         </div>
     </section>
 
     <section id="robotics">
-        <div class="section-header">Robotics & Logic</div>
+        <div class="section-header">Bipedal Mechanics</div>
         <div class="grid">
-            <div class="card" data-type="image" data-src="69.png"><div class="card-media"><img src="69.png"></div><div class="card-body"><span class="badge">Ortho</span>Bipedal Technical Sheet</div></div>
-            <div class="card" data-type="image" data-src="64.png"><div class="card-media"><img src="64.png"></div><div class="card-body"><span class="badge">Detail</span>Leg Joint Hydraulics</div></div>
-            <div class="card" data-type="image" data-src="40.png"><div class="card-media"><img src="40.png"></div><div class="card-body"><span class="badge">Programming</span>Logic Blocks</div></div>
-            <div class="card" data-type="image" data-src="45.png"><div class="card-media"><img src="45.png"></div><div class="card-body"><span class="badge">Hardware</span>Arduino Circuit Card</div></div>
-            <div class="card" data-type="image" data-src="2.png"><div class="card-media"><img src="2.png"></div><div class="card-body"><span class="badge">Stylized</span>Hand-Painted Crate</div></div>
+            <div class="card" data-type="image" data-src="69.png"><div class="card-media"><img src="69.png" loading="lazy"></div><div class="card-body"><span class="badge">Technical</span>Ortho Quad-View</div></div>
+            <div class="card" data-type="image" data-src="64.png"><div class="card-media"><img src="64.png" loading="lazy"></div><div class="card-body"><span class="badge">Hydraulics</span>Leg Joint Detail</div></div>
+            <div class="card" data-type="image" data-src="65.png"><div class="card-media"><img src="65.png" loading="lazy"></div><div class="card-body"><span class="badge">Motion</span>Piston Movement</div></div>
+            <div class="card" data-type="image" data-src="66.png"><div class="card-media"><img src="66.png" loading="lazy"></div><div class="card-body"><span class="badge">Structural</span>Foot Base Detail</div></div>
+        </div>
+    </section>
+
+    <section id="system" style="background: #08080b;">
+        <div class="section-header">Systems & Logic</div>
+        <div class="grid">
+            <div class="card" data-type="image" data-src="40.png"><div class="card-media"><img src="40.png" loading="lazy"></div><div class="card-body"><span class="badge">Scripting</span>Logic Blocks</div></div>
+            <div class="card" data-type="image" data-src="45.png"><div class="card-media"><img src="45.png" loading="lazy"></div><div class="card-body"><span class="badge">Hardware</span>Arduino Circuit Card</div></div>
+            <div class="card" data-type="image" data-src="9.png"><div class="card-media"><img src="9.png" loading="lazy"></div><div class="card-body"><span class="badge">Arch</span>Sci-Fi Tower Render</div></div>
+            <div class="card" data-type="image" data-src="2.png"><div class="card-media"><img src="2.png" loading="lazy"></div><div class="card-body"><span class="badge">Stylized</span>Hand-Painted Crate</div></div>
         </div>
     </section>
 
@@ -160,7 +169,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script>
-        // Preloader Logic
+        // Loader
         window.onload = () => {
             setTimeout(() => {
                 document.getElementById('preloader').style.opacity = '0';
@@ -168,7 +177,7 @@
             }, 800);
         };
 
-        // Cursor Logic (Fixed High Z-Index)
+        // Cursor
         const cursor = document.getElementById('cursor');
         const follower = document.getElementById('cursor-follower');
         document.addEventListener('mousemove', (e) => {
@@ -178,7 +187,7 @@
             follower.style.top = e.clientY + 'px';
         });
 
-        // Compact Lightbox System
+        // Lightbox
         const lightbox = document.getElementById('lightbox');
         const lbBody = document.getElementById('lb-body');
         const lbClose = document.querySelector('.lb-close');
@@ -196,7 +205,7 @@
 
         lightbox.onclick = (e) => { if(e.target === lightbox || e.target === lbClose) lightbox.classList.remove('open'); };
 
-        // Audio System
+        // Audio
         const audioBtn = document.getElementById('audioBtn');
         const bgMusic = document.getElementById('bgMusic');
         audioBtn.onclick = () => {
