@@ -20,117 +20,57 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background-color: var(--bg);
-            color: var(--text-main);
-            font-family: 'Rajdhani', sans-serif;
-            overflow-x: hidden;
-            line-height: 1.6;
-            cursor: none;
-            width: 100%;
-        }
+        body { background-color: var(--bg); color: var(--text-main); font-family: 'Rajdhani', sans-serif; overflow-x: hidden; line-height: 1.6; cursor: none; width: 100%; }
 
-        /* --- SMOOTH PRELOADER --- */
-        #preloader {
-            position: fixed; inset: 0; background: var(--bg);
-            z-index: 10000; display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .loader-logo { font-family: 'Orbitron'; letter-spacing: 5px; color: #fff; margin-bottom: 20px; font-size: 24px; }
-        .loader-bar { width: 200px; height: 1px; background: rgba(0,255,136,0.1); position: relative; overflow: hidden; }
+        /* --- PRELOADER --- */
+        #preloader { position: fixed; inset: 0; background: var(--bg); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s ease; }
+        .loader-logo { font-family: 'Orbitron'; letter-spacing: 5px; color: #fff; font-size: 24px; }
+        .loader-bar { width: 200px; height: 1px; background: rgba(0,255,136,0.1); position: relative; overflow: hidden; margin-top: 15px; }
         .loader-progress { position: absolute; width: 100%; height: 100%; background: var(--neon-green); left: -100%; animation: load 1.2s infinite; }
         @keyframes load { 0% { left: -100%; } 100% { left: 100%; } }
 
         /* --- CURSOR --- */
-        #cursor { width: 8px; height: 8px; background: var(--neon-green); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; box-shadow: 0 0 15px var(--neon-green); transform: translate(-50%, -50%); }
-        #cursor-follower { width: 35px; height: 35px; border: 1px solid var(--neon-green); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; transition: transform 0.15s ease-out; opacity: 0.5; transform: translate(-50%, -50%); }
+        #cursor { width: 8px; height: 8px; background: var(--neon-green); border-radius: 50%; position: fixed; pointer-events: none; z-index: 11000; box-shadow: 0 0 15px var(--neon-green); transform: translate(-50%, -50%); }
 
         /* --- NAVIGATION --- */
-        nav {
-            position: fixed; top: 0; width: 100%; z-index: 1000;
-            padding: 20px 60px; display: flex; justify-content: space-between;
-            align-items: center; background: rgba(5, 5, 8, 0.9); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border);
-        }
-        .logo-box { font-family: 'Orbitron'; font-weight: 900; letter-spacing: 3px; font-size: 22px; text-decoration: none; color: #fff; }
+        nav { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 20px 60px; display: flex; justify-content: space-between; align-items: center; background: rgba(5, 5, 8, 0.9); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border); }
+        .logo-box { font-family: 'Orbitron'; font-weight: 900; font-size: 22px; color: #fff; text-decoration: none; }
         .logo-box span { color: var(--neon-green); }
-        .nav-links { display: flex; gap: 40px; list-style: none; }
-        .nav-links a { text-decoration: none; color: var(--text-dim); font-family: 'Share Tech Mono'; font-size: 13px; text-transform: uppercase; transition: 0.3s; }
-        .nav-links a:hover { color: var(--neon-green); }
 
-        /* --- HERO SECTION (Left Image / Right Content) --- */
-        #hero {
-            height: 100vh; position: relative; display: flex;
-            align-items: center; justify-content: flex-end; 
-            padding-right: 100px; overflow: hidden;
-            background: #000;
-        }
-        
-        .hero-profile-img {
-            position: absolute; left: 0; top: 0;
-            width: 55%; height: 100%;
-            object-fit: cover; z-index: 1;
-            /* Right side blend & Smooth face visibility */
-            mask-image: linear-gradient(to left, transparent 5%, black 75%);
-            -webkit-mask-image: linear-gradient(to left, transparent 5%, black 75%);
-            opacity: 0.95;
-        }
-        
+        /* --- HERO --- */
+        #hero { height: 100vh; position: relative; display: flex; align-items: center; justify-content: flex-end; padding-right: 100px; overflow: hidden; background: #000; }
+        .hero-profile-img { position: absolute; left: 0; top: 0; width: 55%; height: 100%; object-fit: cover; z-index: 1; mask-image: linear-gradient(to left, transparent 5%, black 75%); -webkit-mask-image: linear-gradient(to left, transparent 5%, black 75%); opacity: 0.95; }
         .hero-video-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.2; z-index: 0; }
-
-        .hero-content { 
-            width: 550px; /* Locked Width */
-            z-index: 10; position: relative; text-align: right; 
-            background: radial-gradient(circle at right, rgba(0,0,0,0.5) 0%, transparent 80%);
-            padding: 20px;
-        }
-
-        .hero-tag { font-family: 'Share Tech Mono'; color: var(--neon-pink); font-size: 18px; margin-bottom: 10px; letter-spacing: 2px; }
-        h1 {
-            font-family: 'Orbitron'; font-size: 85px; /* Locked size */
-            line-height: 0.85; color: #fff; margin-bottom: 35px; font-weight: 900;
-        }
+        .hero-content { width: 550px; z-index: 10; text-align: right; }
+        h1 { font-family: 'Orbitron'; font-size: 85px; line-height: 0.85; color: #fff; margin-bottom: 30px; font-weight: 900; }
         .grad-text { background: linear-gradient(90deg, #fff, var(--neon-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* --- GRID & CARDS --- */
+        section { padding: 100px 10%; }
+        .section-header { margin-bottom: 50px; text-align: center; font-family: 'Orbitron'; font-size: 32px; color: #fff; text-transform: uppercase; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; max-width: 1400px; margin: 0 auto; }
         
-        .btn {
-            padding: 16px 40px; font-family: 'Orbitron'; font-size: 13px; font-weight: 700;
-            text-decoration: none; border: 1px solid var(--neon-green);
-            color: var(--neon-green); background: transparent; transition: 0.4s;
-            letter-spacing: 3px; cursor: none;
-        }
-        .btn:hover { background: var(--neon-green); color: #000; box-shadow: 0 0 30px var(--neon-green); }
+        .card { background: var(--bg-accent); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: 0.4s; cursor: pointer; position: relative; }
+        .card:hover { border-color: var(--neon-green); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,255,136,0.1); }
+        .card-media { width: 100%; height: 220px; overflow: hidden; background: #000; pointer-events: none; }
+        .card-media img, .card-media video { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .card:hover .card-media img { transform: scale(1.05); }
+        .card-body { padding: 15px; font-family: 'Share Tech Mono'; font-size: 14px; }
+        .badge { color: var(--neon-blue); font-size: 10px; margin-bottom: 5px; display: block; }
 
-        /* --- PORTFOLIO SECTIONS (Restored & Polished) --- */
-        section { padding: 100px 10%; position: relative; z-index: 5; }
-        .section-header { margin-bottom: 60px; text-align: center; }
-        .section-header h2 { font-family: 'Orbitron'; font-size: 38px; color: #fff; text-transform: uppercase; }
-        .section-header div { width: 60px; height: 3px; background: var(--neon-pink); margin: 15px auto 0; }
+        /* --- LIGHTBOX (Preview Frame) --- */
+        #lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 12000; display: none; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; padding: 40px; }
+        .lb-frame { position: relative; border: 2px solid var(--neon-green); box-shadow: 0 0 50px rgba(0,255,136,0.2); max-width: 90%; max-height: 85vh; background: #000; transform: scale(0.9); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        #lightbox.open { display: flex; opacity: 1; }
+        #lightbox.open .lb-frame { transform: scale(1); }
+        .lb-content { width: 100%; height: 100%; display: block; }
+        .lb-close { position: absolute; top: -40px; right: 0; color: #fff; font-family: 'Orbitron'; cursor: pointer; font-size: 12px; letter-spacing: 2px; }
+        .lb-close:hover { color: var(--neon-pink); }
 
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1200px; margin: 0 auto; }
-        .card { background: var(--bg-accent); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: 0.5s ease; }
-        .card:hover { transform: translateY(-10px); border-color: var(--neon-green); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-        .card-media { width: 100%; height: 240px; overflow: hidden; position: relative; background: #000; }
-        .card-media img, .card-media video { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; }
-        .card-body { padding: 25px; }
-        .card-category { font-family: 'Share Tech Mono'; color: var(--neon-blue); font-size: 12px; text-transform: uppercase; }
-        .card-title { font-family: 'Orbitron'; font-size: 18px; margin: 10px 0; color: #fff; }
+        .music-ctrl { position: fixed; bottom: 30px; left: 30px; z-index: 1001; background: rgba(15,23,42,0.8); padding: 12px 20px; border-radius: 50px; border: 1px solid var(--neon-pink); display: flex; align-items: center; gap: 12px; backdrop-filter: blur(10px); }
+        .play-pause { background: none; border: none; color: #fff; font-size: 16px; cursor: none; }
 
-        /* --- MECHANICS --- */
-        .tech-showcase { display: flex; gap: 40px; align-items: center; max-width: 1200px; margin: 0 auto; }
-        .tech-main-img { flex: 1.5; border: 1px solid var(--border); }
-        .tech-main-img img { width: 100%; display: block; }
-        .tech-details { flex: 1; }
-
-        /* --- AUDIO PLAYER --- */
-        .music-ctrl {
-            position: fixed; bottom: 30px; left: 30px; z-index: 1001;
-            background: rgba(15,23,42,0.8); padding: 12px 20px; border-radius: 50px;
-            border: 1px solid var(--neon-pink); display: flex; align-items: center; gap: 12px; backdrop-filter: blur(10px);
-        }
-        .play-pause { background: none; border: none; color: #fff; font-size: 16px; cursor: none; outline: none; }
-
-        footer { background: #020205; padding: 60px; border-top: 1px solid var(--border); text-align: center; }
-        .footer-logo { font-family: 'Orbitron'; font-size: 24px; color: #fff; margin-bottom: 10px; font-weight: 900; }
+        footer { text-align: center; padding: 60px; border-top: 1px solid var(--border); font-family: 'Orbitron'; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -141,72 +81,72 @@
     </div>
 
     <div id="cursor"></div>
-    <div id="cursor-follower"></div>
 
     <nav>
-        <a href="#hero" class="logo-box">CHETAN<span>JOSHI</span></a>
-        <ul class="nav-links">
-            <li><a href="#tengen">Tengen</a></li>
-            <li><a href="#qship">Q-Ship</a></li>
-            <li><a href="#mechanics">Mechanics</a></li>
-        </ul>
+        <a href="#" class="logo-box">CHETAN<span>JOSHI</span></a>
+        <div style="font-family: 'Share Tech Mono'; font-size: 12px; color: var(--neon-pink);">[ ASSETS_LOADED: 34 ]</div>
     </nav>
 
     <section id="hero">
-        <video class="hero-video-bg" autoplay loop muted playsinline>
-            <source src="11.mp4" type="video/mp4">
-        </video>
+        <video class="hero-video-bg" autoplay loop muted playsinline><source src="11.mp4"></video>
         <img src="CJ.png" alt="Chetan Joshi" class="hero-profile-img">
-        
         <div class="hero-content">
-            <div class="hero-tag">// LEAD DEVELOPER</div>
+            <div style="font-family: 'Share Tech Mono'; color: var(--neon-pink); font-size: 18px; margin-bottom: 10px;">// LEAD DEVELOPER</div>
             <h1>Chetan <br><span class="grad-text">Joshi</span></h1>
-            <a href="#tengen" class="btn">INITIALIZE PROJECTS</a>
         </div>
     </section>
 
     <section id="tengen">
-        <div class="section-header"><h2>TenGen Project</h2><div></div></div>
+        <div class="section-header">TenGen Parkour</div>
         <div class="grid">
-            <div class="card">
-                <div class="card-media">
-                    <video poster="12.png" loop muted autoplay playsinline><source src="15.mp4" type="video/mp4"></video>
-                </div>
-                <div class="card-body">
-                    <span class="card-category">Gameplay</span>
-                    <h3 class="card-title">TenGen Movement Reel</h3>
-                </div>
-            </div>
-            <div class="card"><div class="card-media"><img src="100.png"></div><div class="card-body"><span class="card-category">Environment</span><h3 class="card-title">Alpha Level Snap</h3></div></div>
-            <div class="card"><div class="card-media"><img src="14.png"></div><div class="card-body"><span class="card-category">Engine</span><h3 class="card-title">Unity Editor Setup</h3></div></div>
+            <div class="card" data-type="video" data-src="15.mp4"><div class="card-media"><video muted loop autoplay><source src="15.mp4"></video></div><div class="card-body"><span class="badge">Gameplay Reel</span>TenGen Movement Study</div></div>
+            <div class="card" data-type="image" data-src="100.png"><div class="card-media"><img src="100.png"></div><div class="card-body"><span class="badge">Environment</span>Alpha Snap 01</div></div>
+            <div class="card" data-type="image" data-src="101.png"><div class="card-media"><img src="101.png"></div><div class="card-body"><span class="badge">Environment</span>Urban View 02</div></div>
+            <div class="card" data-type="image" data-src="13.png"><div class="card-media"><img src="13.png"></div><div class="card-body"><span class="badge">Technical</span>Level Detailing</div></div>
+            <div class="card" data-type="image" data-src="14.png"><div class="card-media"><img src="14.png"></div><div class="card-body"><span class="badge">Editor</span>Unity Scene Preview</div></div>
         </div>
     </section>
 
-    <section id="qship" style="background-color: var(--bg-accent);">
-        <div class="section-header"><h2>Q-Ship Technicals</h2><div></div></div>
+    <section id="qship" style="background: #08080b;">
+        <div class="section-header">3D Art Masterpieces</div>
         <div class="grid">
-            <div class="card"><div class="card-media"><img src="5.jpg"></div><div class="card-body"><h3 class="card-title">High-Poly Render</h3></div></div>
-            <div class="card"><div class="card-media"><img src="6.jpg"></div><div class="card-body"><h3 class="card-title">Wireframe Flow</h3></div></div>
-            <div class="card"><div class="card-media"><img src="54.png"></div><div class="card-body"><h3 class="card-title">Shader Graph</h3></div></div>
+            <div class="card" data-type="image" data-src="5.jpg"><div class="card-media"><img src="5.jpg"></div><div class="card-body"><span class="badge">Render</span>Q-Ship Beauty Shot</div></div>
+            <div class="card" data-type="image" data-src="6.jpg"><div class="card-media"><img src="6.jpg"></div><div class="card-body"><span class="badge">Technical</span>Wireframe Topology</div></div>
+            <div class="card" data-type="image" data-src="54.png"><div class="card-media"><img src="54.png"></div><div class="card-body"><span class="badge">Shader</span>Technical Node Graph</div></div>
+            <div class="card" data-type="image" data-src="56.png"><div class="card-media"><img src="56.png"></div><div class="card-body"><span class="badge">UV Layout</span>Texture Painting Prep</div></div>
+            <div class="card" data-type="image" data-src="4.jpg"><div class="card-media"><img src="4.jpg"></div><div class="card-body"><span class="badge">Render</span>Alternate Perspective</div></div>
+            <div class="card" data-type="image" data-src="7.png"><div class="card-media"><img src="7.png"></div><div class="card-body"><span class="badge">Mesh</span>Base Mesh Setup</div></div>
+            <div class="card" data-type="image" data-src="10.png"><div class="card-media"><img src="10.png"></div><div class="card-body"><span class="badge">Lighting</span>Product Fidelity Study</div></div>
         </div>
     </section>
 
-    <section id="mechanics">
-        <div class="section-header"><h2>Mechanics & Hydraulics</h2><div></div></div>
-        <div class="tech-showcase">
-            <div class="tech-main-img"><img src="69.png"></div>
-            <div class="tech-details">
-                <h3 style="font-family:'Orbitron'; margin-bottom:20px; color:#fff;">Technical Study</h3>
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-                    <img src="64.png" style="width:100%; border:1px solid var(--border);">
-                    <img src="65.png" style="width:100%; border:1px solid var(--border);">
-                </div>
-                <div style="margin-top:20px;">
-                    <img src="45.png" style="width:100%; border:1px solid var(--border);">
-                </div>
-            </div>
+    <section id="robotics">
+        <div class="section-header">Bipedal Mechanics</div>
+        <div class="grid">
+            <div class="card" data-type="image" data-src="69.png"><div class="card-media"><img src="69.png"></div><div class="card-body"><span class="badge">Technical</span>Quad-View Ortho</div></div>
+            <div class="card" data-type="image" data-src="64.png"><div class="card-media"><img src="64.png"></div><div class="card-body"><span class="badge">Detail</span>Hydraulic Leg Joints</div></div>
+            <div class="card" data-type="image" data-src="65.png"><div class="card-media"><img src="65.png"></div><div class="card-body"><span class="badge">Detail</span>Piston Movement</div></div>
+            <div class="card" data-type="image" data-src="66.png"><div class="card-media"><img src="66.png"></div><div class="card-body"><span class="badge">Detail</span>Structural Base</div></div>
         </div>
     </section>
+
+    <section id="extras" style="background: #08080b;">
+        <div class="section-header">Architecture & Systems</div>
+        <div class="grid">
+            <div class="card" data-type="image" data-src="9.png"><div class="card-media"><img src="9.png"></div><div class="card-body"><span class="badge">Environment</span>Sci-Fi Tower Render</div></div>
+            <div class="card" data-type="image" data-src="8.png"><div class="card-media"><img src="8.png"></div><div class="card-body"><span class="badge">Atmosphere</span>Lighting Study</div></div>
+            <div class="card" data-type="image" data-src="45.png"><div class="card-media"><img src="45.png"></div><div class="card-body"><span class="badge">Hardware</span>Arduino Circuit Card</div></div>
+            <div class="card" data-type="image" data-src="40.png"><div class="card-media"><img src="40.png"></div><div class="card-body"><span class="badge">Logic</span>Scripting Blocks</div></div>
+            <div class="card" data-type="image" data-src="2.png"><div class="card-media"><img src="2.png"></div><div class="card-body"><span class="badge">Stylized</span>Hand-Painted Crate</div></div>
+        </div>
+    </section>
+
+    <div id="lightbox">
+        <div class="lb-frame">
+            <div class="lb-close">CLOSE [X]</div>
+            <div id="lb-body"></div>
+        </div>
+    </div>
 
     <div class="music-ctrl">
         <button id="audioBtn" class="play-pause">▶</button>
@@ -214,57 +154,52 @@
         <audio id="bgMusic" src="S.mp3" loop></audio>
     </div>
 
-    <footer>
-        <div class="footer-logo">CHETAN JOSHI</div>
-        <p style="color:var(--text-dim); font-size:12px;">Lead Dev @ ThroneLeaf Games | 3D Artist | 2026</p>
-    </footer>
+    <footer>CHETAN JOSHI // LEAD DEV @ THRONELEAF GAMES // 2026</footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script>
-        window.addEventListener('load', () => {
-            const preloader = document.getElementById('preloader');
+        // Preloader
+        window.onload = () => {
             setTimeout(() => {
-                preloader.style.opacity = '0';
-                setTimeout(() => preloader.style.display = 'none', 600);
-                attemptAutoplay();
+                document.getElementById('preloader').style.opacity = '0';
+                setTimeout(() => document.getElementById('preloader').style.display = 'none', 600);
             }, 800);
-        });
-
-        const cursor = document.getElementById('cursor');
-        const follower = document.getElementById('cursor-follower');
-        document.addEventListener('mousemove', (e) => {
-            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0 });
-            gsap.to(follower, { x: e.clientX, y: e.clientY, duration: 0.3 });
-        });
-
-        const audioBtn = document.getElementById('audioBtn');
-        const bgMusic = document.getElementById('bgMusic');
-        let isPlaying = false;
-
-        function attemptAutoplay() {
-            bgMusic.play().then(() => {
-                audioBtn.innerText = '||';
-                isPlaying = true;
-            }).catch(() => {
-                audioBtn.innerText = '▶';
-                document.body.addEventListener('click', () => {
-                    if (!isPlaying) { bgMusic.play(); audioBtn.innerText = '||'; isPlaying = true; }
-                }, { once: true });
-            });
-        }
-
-        audioBtn.onclick = () => {
-            if (isPlaying) { bgMusic.pause(); audioBtn.innerText = '▶'; }
-            else { bgMusic.play(); audioBtn.innerText = '||'; }
-            isPlaying = !isPlaying;
         };
 
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
-            });
+        // Cursor
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
         });
+
+        // Lightbox System
+        const lightbox = document.getElementById('lightbox');
+        const lbBody = document.getElementById('lb-body');
+        const lbClose = document.querySelector('.lb-close');
+
+        document.querySelectorAll('.card').forEach(card => {
+            card.onclick = () => {
+                const type = card.dataset.type;
+                const src = card.dataset.src;
+                
+                lbBody.innerHTML = type === 'video' 
+                    ? `<video class="lb-content" controls autoplay><source src="${src}"></video>`
+                    : `<img class="lb-content" src="${src}">`;
+                
+                lightbox.classList.add('open');
+            };
+        });
+
+        lightbox.onclick = (e) => { if(e.target === lightbox || e.target === lbClose) lightbox.classList.remove('open'); };
+
+        // Audio
+        const audioBtn = document.getElementById('audioBtn');
+        const bgMusic = document.getElementById('bgMusic');
+        audioBtn.onclick = () => {
+            if (bgMusic.paused) { bgMusic.play(); audioBtn.innerText = '||'; }
+            else { bgMusic.pause(); audioBtn.innerText = '▶'; }
+        };
     </script>
 </body>
 </html>
