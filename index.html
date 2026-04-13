@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chetan Joshi — Lead Dev & 3D Artist</title>
+    <meta name="viewport" content="width=1280"> <title>Chetan Joshi — Lead Dev | ThroneLeaf Games</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
     
@@ -14,87 +13,78 @@
             --neon-pink: #ff0066;
             --neon-blue: #00cfff;
             --text-main: #e0e6ed;
-            --text-dim: #94a3b8;
             --border: rgba(255, 255, 255, 0.1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background-color: var(--bg); color: var(--text-main); font-family: 'Rajdhani', sans-serif; overflow-x: hidden; cursor: none; }
+        body { background-color: var(--bg); color: var(--text-main); font-family: 'Rajdhani', sans-serif; overflow-x: hidden; cursor: none; width: 100%; }
 
-        /* --- LOADER --- */
-        #preloader { position: fixed; inset: 0; background: var(--bg); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .loader-bar { width: 150px; height: 1px; background: rgba(0,255,136,0.1); position: relative; overflow: hidden; margin-top: 10px; }
-        .loader-progress { position: absolute; width: 100%; height: 100%; background: var(--neon-green); left: -100%; animation: load 1.2s infinite; }
-        @keyframes load { 0% { left: -100%; } 100% { left: 100%; } }
-
-        /* --- NAVIGATION --- */
+        /* --- NAVIGATION (Locked) --- */
         nav {
             position: fixed; top: 0; width: 100%; z-index: 1000;
-            padding: 20px 5%; display: flex; justify-content: space-between;
-            align-items: center; background: rgba(5, 5, 8, 0.9); backdrop-filter: blur(10px);
+            padding: 20px 60px; display: flex; justify-content: space-between;
+            align-items: center; background: rgba(5, 5, 8, 0.9); backdrop-filter: blur(15px);
         }
-        .logo-box { font-family: 'Orbitron'; font-weight: 900; letter-spacing: 2px; font-size: 18px; text-decoration: none; color: #fff; }
+        .logo-box { font-family: 'Orbitron'; font-weight: 900; font-size: 22px; text-decoration: none; color: #fff; letter-spacing: 2px; }
         .logo-box span { color: var(--neon-green); }
-        .nav-links { display: flex; gap: 25px; list-style: none; }
-        .nav-links a { text-decoration: none; color: var(--text-dim); font-family: 'Share Tech Mono'; font-size: 12px; text-transform: uppercase; }
 
-        /* --- HERO SECTION --- */
+        /* --- HERO SECTION (Left Image / Right Content) --- */
         #hero {
             height: 100vh; position: relative; display: flex;
             align-items: center; justify-content: flex-end; overflow: hidden;
         }
         
         .hero-profile-img {
-            position: absolute; left: 0; top: 0; width: 60%; height: 100%;
+            position: absolute; left: 0; top: 0; width: 55%; height: 100%;
             object-fit: cover; z-index: 1;
-            mask-image: linear-gradient(to left, transparent 0%, black 80%);
-            -webkit-mask-image: linear-gradient(to left, transparent 0%, black 80%);
-            opacity: 0.9;
+            mask-image: linear-gradient(to left, transparent 5%, black 80%);
+            -webkit-mask-image: linear-gradient(to left, transparent 5%, black 80%);
+            opacity: 0.95;
         }
         
-        .hero-video-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.15; z-index: 0; }
+        .hero-video-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.2; z-index: 0; }
 
         .hero-content { 
-            width: 500px; z-index: 10; position: relative; text-align: right; 
-            padding: 40px; margin-right: 5%;
-            background: linear-gradient(to left, rgba(0,0,0,0.8), transparent);
+            width: 600px; z-index: 10; position: relative; text-align: right; 
+            padding-right: 80px;
         }
 
-        .hero-tag { font-family: 'Share Tech Mono'; color: var(--neon-pink); font-size: 14px; margin-bottom: 5px; }
-        h1 { font-family: 'Orbitron'; font-size: 65px; line-height: 0.9; color: #fff; margin-bottom: 15px; }
+        .hero-tag { font-family: 'Share Tech Mono'; color: var(--neon-pink); font-size: 18px; margin-bottom: 5px; letter-spacing: 2px; }
+        h1 { font-family: 'Orbitron'; font-size: 85px; line-height: 0.85; color: #fff; margin-bottom: 30px; font-weight: 900; }
         .grad-text { background: linear-gradient(90deg, #fff, var(--neon-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        /* Chota aur visible text */
-        .hero-desc {
-            color: #fff; font-size: 16px; line-height: 1.4;
-            margin-bottom: 30px; font-weight: 400;
-            opacity: 0.9; letter-spacing: 0.5px;
-        }
 
         .btn {
-            padding: 12px 30px; font-family: 'Orbitron'; font-size: 11px;
+            padding: 16px 40px; font-family: 'Orbitron'; font-size: 13px; font-weight: 700;
             text-decoration: none; border: 1px solid var(--neon-green);
             color: var(--neon-green); background: transparent; transition: 0.4s;
-            letter-spacing: 2px;
+            letter-spacing: 3px; cursor: none;
         }
-        .btn:hover { background: var(--neon-green); color: #000; box-shadow: 0 0 20px var(--neon-green); }
+        .btn:hover { background: var(--neon-green); color: #000; box-shadow: 0 0 30px var(--neon-green); }
 
-        /* --- MUSIC --- */
+        /* --- PORTFOLIO SECTIONS (Niche ka Content) --- */
+        section { padding: 100px 10%; position: relative; }
+        .section-header { margin-bottom: 60px; text-align: center; }
+        .section-header h2 { font-family: 'Orbitron'; font-size: 36px; color: #fff; text-transform: uppercase; }
+        
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1200px; margin: 0 auto; }
+        .card { background: #0a0a0f; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: 0.4s; }
+        .card:hover { border-color: var(--neon-green); transform: translateY(-5px); }
+        .card-media { width: 100%; height: 220px; background: #000; overflow: hidden; }
+        .card-media img, .card-media video { width: 100%; height: 100%; object-fit: cover; }
+        .card-body { padding: 20px; }
+        .card-title { font-family: 'Orbitron'; font-size: 16px; color: #fff; margin-top: 5px; }
+
+        /* --- MECHANICS --- */
+        .tech-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; max-width: 1200px; margin: 0 auto; align-items: center; }
+        .tech-img { border: 1px solid var(--border); width: 100%; }
+
+        /* --- MUSIC CTRL --- */
         .music-ctrl {
-            position: fixed; bottom: 20px; left: 20px; z-index: 1001;
-            background: rgba(15,23,42,0.8); padding: 10px 15px; border-radius: 30px;
-            border: 1px solid var(--neon-pink); display: flex; align-items: center; gap: 10px;
+            position: fixed; bottom: 30px; left: 30px; z-index: 1001;
+            background: rgba(15,23,42,0.8); padding: 12px 20px; border-radius: 50px;
+            border: 1px solid var(--neon-pink); display: flex; align-items: center; gap: 12px; backdrop-filter: blur(10px);
         }
-
-        /* --- MOBILE RESPONSIVE FIX --- */
-        @media (max-width: 768px) {
-            #hero { flex-direction: column; justify-content: center; text-align: center; }
-            .hero-profile-img { width: 100%; height: 50%; mask-image: linear-gradient(to bottom, black 70%, transparent 100%); }
-            .hero-content { width: 90%; margin: 50% auto 0; text-align: center; background: none; padding: 10px; }
-            h1 { font-size: 45px; }
-            .nav-links { display: none; } /* Hide links on small mobile for space */
-            .music-ctrl { scale: 0.8; bottom: 10px; left: 10px; }
-        }
+        .play-pause { background: none; border: none; color: #fff; font-size: 16px; cursor: none; }
 
         /* --- CURSOR --- */
         #cursor { width: 8px; height: 8px; background: var(--neon-green); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); }
@@ -102,55 +92,65 @@
 </head>
 <body>
 
-    <div id="preloader">
-        <h2 style="font-family: 'Orbitron'; font-size: 14px; letter-spacing: 3px;">THRONELEAF</h2>
-        <div class="loader-bar"><div class="loader-progress"></div></div>
-    </div>
-
     <div id="cursor"></div>
 
     <nav>
         <a href="#" class="logo-box">CHETAN<span>JOSHI</span></a>
-        <ul class="nav-links">
-            <li><a href="#hero">Home</a></li>
-            <li><a href="#tengen">Tengen</a></li>
-            <li><a href="#qship">Q-Ship</a></li>
-        </ul>
+        <div style="font-family: 'Share Tech Mono'; font-size: 12px; color: var(--neon-pink);">[ SYSTEM_ONLINE ]</div>
     </nav>
 
     <section id="hero">
         <video class="hero-video-bg" autoplay loop muted playsinline>
             <source src="11.mp4" type="video/mp4">
         </video>
-        
         <img src="CJ.png" alt="Chetan Joshi" class="hero-profile-img">
         
         <div class="hero-content">
-            <div class="hero-tag">// LEAD DEV & 3D ARTIST</div>
+            <div class="hero-tag">// LEAD DEVELOPER</div>
             <h1>Chetan <br><span class="grad-text">Joshi</span></h1>
-            <p class="hero-desc">
-                Stylized 3D Worlds & Robotics Mechanics.<br>
-                Founder, ThroneLeaf Games. Building TenGen Parkour.
-            </p>
             <a href="#tengen" class="btn">INITIALIZE PROJECTS</a>
         </div>
     </section>
 
+    <section id="tengen">
+        <div class="section-header"><h2>TenGen Project</h2></div>
+        <div class="grid">
+            <div class="card"><div class="card-media"><video autoplay loop muted playsinline><source src="15.mp4"></video></div><div class="card-body"><p class="card-title">Gameplay Reel</p></div></div>
+            <div class="card"><div class="card-media"><img src="100.png"></div><div class="card-body"><p class="card-title">Environment Alpha</p></div></div>
+            <div class="card"><div class="card-media"><img src="14.png"></div><div class="card-body"><p class="card-title">Unity Editor View</p></div></div>
+        </div>
+    </section>
+
+    <section id="qship" style="background: #08080b;">
+        <div class="section-header"><h2>Q-Ship Technicals</h2></div>
+        <div class="grid">
+            <div class="card"><div class="card-media"><img src="5.jpg"></div><div class="card-body"><p class="card-title">High-Poly Render</p></div></div>
+            <div class="card"><div class="card-media"><img src="6.jpg"></div><div class="card-body"><p class="card-title">Wireframe Flow</p></div></div>
+            <div class="card"><div class="card-media"><img src="54.png"></div><div class="card-body"><p class="card-title">Shader Nodes</p></div></div>
+        </div>
+    </section>
+
+    <section id="mechanics">
+        <div class="section-header"><h2>Bipedal Mechanics</h2></div>
+        <div class="tech-grid">
+            <img src="69.png" class="tech-img">
+            <div>
+                <h3 style="font-family:'Orbitron'; margin-bottom:20px;">Technical Study</h3>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <img src="64.png" style="width:100%; border:1px solid var(--border);">
+                    <img src="65.png" style="width:100%; border:1px solid var(--border);">
+                </div>
+            </div>
+        </div>
+    </section>
+
     <div class="music-ctrl">
-        <button id="audioBtn" style="background:none; border:none; color:#fff; cursor:pointer;">▶</button>
+        <button id="audioBtn" class="play-pause">▶</button>
         <span style="font-family:'Share Tech Mono'; font-size:10px; color:#fff;">S.MP3 // AMBIENCE</span>
         <audio id="bgMusic" src="S.mp3" loop></audio>
     </div>
 
     <script>
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('preloader').style.display = 'none';
-                const bgMusic = document.getElementById('bgMusic');
-                bgMusic.play().catch(() => console.log("Autoplay blocked"));
-            }, 1000);
-        });
-
         const cursor = document.getElementById('cursor');
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
@@ -163,6 +163,14 @@
             if (bgMusic.paused) { bgMusic.play(); audioBtn.innerText = '||'; }
             else { bgMusic.pause(); audioBtn.innerText = '▶'; }
         };
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
     </script>
 </body>
 </html>
