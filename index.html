@@ -30,7 +30,7 @@
             cursor: none; /* Custom cursor functionality */
         }
 
-        /* --- PRELOADER (Fast & Smooth) --- */
+        /* --- PRELOADER --- */
         #preloader {
             position: fixed; inset: 0; background: var(--bg);
             z-index: 10000; display: flex; flex-direction: column;
@@ -39,13 +39,13 @@
         }
         .loader-logo { font-family: 'Orbitron'; letter-spacing: 5px; color: #fff; margin-bottom: 20px; }
         .loader-bar {
-            width: 200px; height: 2px; background: rgba(0,255,136,0.1);
+            width: 200px; height: 1px; background: rgba(0,255,136,0.1);
             position: relative; overflow: hidden;
         }
         .loader-progress {
             position: absolute; width: 100%; height: 100%;
             background: var(--neon-green); left: -100%;
-            animation: load 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            animation: load 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
         @keyframes load { 0% { left: -100%; } 50% { left: 0; } 100% { left: 100%; } }
 
@@ -59,7 +59,7 @@
         #cursor-follower {
             width: 35px; height: 35px; border: 1px solid var(--neon-green);
             border-radius: 50%; position: fixed; pointer-events: none;
-            z-index: 9998; transition: transform 0.15s ease-out, opacity 0.3s;
+            z-index: 9998; transition: transform 0.15s ease-out;
             opacity: 0.5; transform: translate(-50%, -50%);
         }
 
@@ -80,34 +80,35 @@
         }
         .nav-links a:hover { color: var(--neon-green); }
 
-        /* --- HERO SECTION (CJ.png as Background) --- */
+        /* --- HERO SECTION (CJ.png as Full Background) --- */
         #hero {
             height: 100vh; position: relative; display: flex;
-            align-items: center; justify-content: flex-start;
-            padding: 0 10%; overflow: hidden;
+            align-items: center; justify-content: flex-end; /* Align content to the right */
+            padding-right: 10%; overflow: hidden;
             background: #000;
         }
         
-        /* THE MAIN RED PICTURE AS BACKGROUND */
-        .hero-bg-img {
-            position: absolute; inset: 0;
-            width: 100%; height: 100%;
+        /* THE MAIN RED PICTURE ON THE LEFT */
+        .hero-profile-img {
+            position: absolute; left: 0; top: 0;
+            width: 50%; height: 100%;
             object-fit: cover; /* full view cover */
             z-index: 1;
-            opacity: 0.8;
-            /* Stylized vignette for depth */
-            filter: saturate(1.1) brightness(0.9);
-            mask-image: radial-gradient(circle at 30% 50%, black 20%, transparent 80%);
-            -webkit-mask-image: radial-gradient(circle at 30% 50%, black 20%, transparent 80%);
+            /* 1. Gol nahi h.
+               2. Right se oratity low kro kyuki piche ka nhi dikh rha */
+            mask-image: linear-gradient(to left, transparent 10%, black 80%);
+            -webkit-mask-image: linear-gradient(to left, transparent 10%, black 80%);
+            opacity: 0.9;
+            filter: drop-shadow(20px 0 50px rgba(255, 0, 102, 0.15));
         }
         
-        /* Ambient Video Background (Cinematic layer) */
+        /* Ambient Video Background ( pure background pe chalega) */
         .hero-video-bg {
             position: absolute; inset: 0; width: 100%; height: 100%;
-            object-fit: cover; opacity: 0.1; z-index: 0;
+            object-fit: cover; opacity: 0.15; z-index: 0;
         }
 
-        .hero-content { max-width: 600px; z-index: 10; position: relative; }
+        .hero-content { max-width: 600px; z-index: 10; position: relative; text-align: right; }
         .hero-tag { font-family: 'Share Tech Mono'; color: var(--neon-pink); font-size: 1rem; margin-bottom: 1rem; }
         h1 {
             font-family: 'Orbitron'; font-size: clamp(3rem, 7vw, 5.5rem);
@@ -140,10 +141,8 @@
         .card {
             background: var(--bg-accent); border: 1px solid var(--border);
             border-radius: 4px; overflow: hidden; transition: 0.5s ease;
-            opacity: 0; transform: translateY(20px); /* Pre-animation state */
         }
-        .card.active { opacity: 1; transform: translateY(0); }
-        .card:hover { transform: translateY(-10px) !important; border-color: var(--neon-green); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .card:hover { transform: translateY(-10px); border-color: var(--neon-green); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
         
         .card-media { width: 100%; height: 240px; overflow: hidden; position: relative; background: #000; }
         .card-media img, .card-media video { 
@@ -186,7 +185,8 @@
         @media (max-width: 1024px) {
             nav { padding: 1.5rem 2rem; }
             #hero { padding: 0 5%; justify-content: center; text-align: center; }
-            .hero-bg-img { mask-image: none; opacity: 0.6; }
+            .hero-profile-img { display: none; }
+            .hero-content { text-align: center; }
             .tech-showcase { flex-direction: column; }
         }
     </style>
@@ -216,7 +216,7 @@
             <source src="11.mp4" type="video/mp4">
         </video>
         
-        <img src="CJ.png" alt="Chetan Joshi" class="hero-bg-img">
+        <img src="CJ.png" alt="Chetan Joshi" class="hero-profile-img">
         
         <div class="hero-content">
             <div class="hero-tag">// LEAD DEVELOPER & 3D ARTIST</div>
@@ -304,7 +304,7 @@
             <div></div>
         </div>
         <div class="inner-content" style="max-width: 1200px; margin: 0 auto;">
-            <div class="tech-showcase cardactive" style="opacity:1; transform:none;">
+            <div class="tech-showcase">
                 <div class="tech-main-img">
                     <img src="69.png" alt="Bipedal Ortho" loading="lazy">
                 </div>
@@ -326,7 +326,7 @@
                 <div class="card-media"><img src="2.png" alt="Stylized Crate" loading="lazy"></div>
                 <div class="card-body">
                     <span class="card-category">Stylized Art</span>
-                    <h3 class="card-title">Hand-Painted Crate</h3>
+                    <h3 class="card-title">Hand-Painted Crate Help Me</h3>
                 </div>
             </div>
             <div class="card">
@@ -395,14 +395,23 @@
 
         function attemptAutoplay() {
             // Modern browsers block autoplay with sound unless interacted.
-            // This is a programmatic attempt.
             bgMusic.play().then(() => {
                 audioBtn.innerText = '||';
                 isPlaying = true;
                 console.log("Audio autoplay initialized.");
             }).catch(error => {
+                // If blocked, wait for first click on body to play
                 console.log("Autoplay blocked. Waiting for user interaction.");
                 audioBtn.innerText = '▶';
+                
+                // Fallback: Play on first body click
+                document.body.addEventListener('click', () => {
+                    if (!isPlaying) {
+                        bgMusic.play();
+                        audioBtn.innerText = '||';
+                        isPlaying = true;
+                    }
+                }, { once: true });
             });
         }
 
@@ -420,20 +429,6 @@
             }
             isPlaying = !isPlaying;
         }
-
-        // Scroll Reveal Animation for Cards (Smooth loder effect)
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target); // Anim only once
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.card').forEach(card => {
-            observer.observe(card);
-        });
 
         // Smooth Scroll Logic
         document.querySelectorAll('nav a').forEach(anchor => {
